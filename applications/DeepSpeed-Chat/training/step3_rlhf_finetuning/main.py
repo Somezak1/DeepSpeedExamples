@@ -444,8 +444,11 @@ def create_datasets(args, tokenizer, train_phase=3):
 
 
 def main():
+    # 调试及注释所用脚本:
+    # CUDA_VISIBLE_DEVICES=2 deepspeed main.py --data_path Dahoas/rm-static --data_split 2,4,4 --actor_model_name_or_path /data1/csw_model_weights/Llama-2-7b-chat-hf --critic_model_name_or_path /data0/csw/DeepSpeedExamples/applications/DeepSpeed-Chat/training/step2_reward_model_finetuning/output_step2_llama_7b_epoch1_lr9.65e-6 --num_padding_at_beginning 1 --per_device_generation_batch_size 1 --per_device_training_batch_size 1 --generation_batches 1 --ppo_epochs 1 --max_answer_seq_len 256 --max_prompt_seq_len 256 --actor_learning_rate 9.65e-6 --critic_learning_rate 5e-6 --actor_weight_decay 0.1 --critic_weight_decay 0.1 --num_train_epochs 1 --lr_scheduler_type cosine --gradient_accumulation_steps 1 --actor_gradient_checkpointing --critic_gradient_checkpointing --offload_reference_model --actor_dropout 0.0 --num_warmup_steps 100 --deepspeed --seed 1234 --actor_zero_stage 3 --critic_zero_stage 3 --actor_lora_dim 64 --critic_lora_dim 64 --critic_lora_module_name layers. --actor_lora_module_name layers. --output_dir ./output_step3_llama2
     args = parse_args()
 
+    # args.local_rank: 0
     if args.local_rank == -1:
         device = torch.device(get_accelerator().device_name())
     else:
@@ -455,13 +458,16 @@ def main():
         deepspeed.init_distributed()
 
     args.global_rank = torch.distributed.get_rank()
+    # args.global_rank: 0
 
     unsupervised_training_enabled = args.unsupervised_dataset_name and args.unsupervised_dataset_config_name
+    # unsupervised_training_enabled: None
     if unsupervised_training_enabled:
         # if we enable unsupervised training, we need to double the batch size for actor model
         args.gradient_accumulation_steps_actor = args.gradient_accumulation_steps * 2
     else:
         args.gradient_accumulation_steps_actor = args.gradient_accumulation_steps
+        # args.gradient_accumulation_steps_actor: 1
 
     # If passed along, set the training seed now.
     set_random_seed(args.seed)
@@ -470,6 +476,7 @@ def main():
     # load_hf_tokenizer will get the correct tokenizer and set padding tokens based on the model family
     args.end_of_conversation_token = "<|endoftext|>"
     additional_special_tokens = args.end_of_conversation_token if args.add_eot_token else None
+    # additional_special_tokens: None
     tokenizer = load_hf_tokenizer(args.actor_model_name_or_path,
                                   fast_tokenizer=True,
                                   add_special_tokens=additional_special_tokens)
@@ -486,18 +493,22 @@ def main():
         args=args)
 
     # Mixed Precision ZeRO++
+    # args.enable_mixed_precision_lora: False
     if args.enable_mixed_precision_lora:
         assert args.actor_lora_dim > 0, "Mixed Precision LoRA requires LoRA to be enabled"
         assert args.actor_zero_stage == 3, "Mixed Precision LoRA requires Zero stage 3"
         rlhf_engine.actor.optimizer.quantize_nontrainable_params()
         print_rank_0("Mixed Precision ZeRO++ enabled")
 
+    # ppo_trainer: DeepSpeedPPOTrainer
     ppo_trainer = DeepSpeedPPOTrainerUnsupervised if unsupervised_training_enabled else DeepSpeedPPOTrainer
     trainer = ppo_trainer(rlhf_engine, args)
 
     # first number is how many experience-batch to generate, second number is the training batch size, which is the micro-batch size used
     exp_mini_dataset = MiniDataset(args.generation_batches,
+                                   # args.generation_batches: 1
                                    args.per_device_training_batch_size)
+                                   # args.per_device_training_batch_size: 1
     unsup_mini_dataset = MiniDataset(args.generation_batches,
                                      args.per_device_training_batch_size)
 
@@ -506,16 +517,24 @@ def main():
         f"***** Running training (total_iters={num_total_iters}) *****",
         args.global_rank)
 
+    # non_overflow_step_count: 没有发生数值溢出的 step 总数
     non_overflow_step_count = 0
     step_average_reward = 0.
     ema_reward_score = ExponentialMovingAverage()
 
+    # args.num_train_epochs: 1
     for epoch in range(args.num_train_epochs):
         print_rank_0(
             f"Beginning of Epoch {epoch+1}/{args.num_train_epochs}, Total Generation Batches {min(len(prompt_train_dataloader), len(unsupervised_train_dataloader))}",
             args.global_rank)
         for step, (batch_prompt, batch_unsupervised) in enumerate(
                 zip(prompt_train_dataloader, unsupervised_train_dataloader)):
+            # args.per_device_generation_batch_size: 1
+            # batch_prompt: {
+            #     "prompt": shape [args.per_device_generation_batch_size, 256],
+            #     "prompt_att_mask": shape [args.per_device_generation_batch_size, 256]
+            # }
+            # batch_unsupervised: None
 
             batch_prompt = to_device(batch_prompt, device)
 
@@ -528,16 +547,33 @@ def main():
             out = trainer.generate_experience(batch_prompt['prompt'],
                                               batch_prompt['prompt_att_mask'],
                                               step)
+            # actor model 对 batch_prompt 中的所有样本生成 answer
+            # 并将 answer 满足要求（生成长度大于 1）的样本分别输入 actor/ref/critic/reward model, 并将结果记录至 out
+            # out: {
+            #     'prompts': prompts,                                                  # [args.per_device_generation_batch_size, 256], 原始 batch 样本, 每个样本由 padding + question 组成
+            #     'logprobs': gather_log_probs(logits[:, :-1, :], seq[:, 1:]),         # [args.per_device_generation_batch_size, 256 + batch_ans_max_len - 1], 表示 actor model 对于每个标签 token 的预测概率
+            #     'ref_logprobs': gather_log_probs(logits_ref[:, :-1, :], seq[:, 1:]), # [args.per_device_generation_batch_size, 256 + batch_ans_max_len - 1], 表示 ref model 对于每个标签 token 的预测概率
+            #     'value': values,                                                     # [args.per_device_generation_batch_size, 256 + batch_ans_max_len - 1], 表示 critic model 对每个样本除最后一个 token 以外其他所有 token 的价值估计
+            #     'rewards': reward_score,                                             # [args.per_device_generation_batch_size, ], 表示 reward model 对每个样本 answer 最后一个 token 的打分
+            #     'input_ids': seq,                                                    # [args.per_device_generation_batch_size, 256 + batch_ans_max_len], seq 包括 padding + question + answer + padding
+            #     "attention_mask": attention_mask                                     # [args.per_device_generation_batch_size, 256 + batch_ans_max_len], pad_token_id 为0, 其余 token 为 1
+            # }
+            # 这里假设 batch_prompt 中的 args.per_device_generation_batch_size 个样本都满足生成长度的要求
 
             training_start = time.time()
+            # batch_unsupervised: None
             if batch_unsupervised is not None:
                 batch_unsupervised = to_device(batch_unsupervised, device)
                 unsup_dataset = unsup_mini_dataset.add(batch_unsupervised)
             else:
                 unsup_dataset = unsup_mini_dataset.add(
                     [[None] * args.per_device_generation_batch_size])
+                    # args.per_device_training_batch_size: 1
+                # unsup_dataset: [[[None]]]
 
             exp_dataset = exp_mini_dataset.add(out)
+            # exp_mini_dataset.add(...) 方法就是将 args.per_device_generation_batch_size 大小的 out 拆成数个 大小为 args.per_device_training_batch_size 的 small_out
+            # exp_dataset: [small_out, small_out, ..., small_out]
 
             if exp_dataset is not None:
                 inner_iter = 0
@@ -545,22 +581,28 @@ def main():
                 average_reward = 0
 
                 if args.actor_gradient_checkpointing:
+                    # args.actor_gradient_checkpointing: True
                     rlhf_engine.actor.gradient_checkpointing_enable()
 
+                # args.ppo_epochs: 1
                 for ppo_ep in range(args.ppo_epochs):
                     for i, (exp_data, unsup_data) in enumerate(
                             zip(exp_dataset, unsup_dataset)):
                         actor_loss, critic_loss = trainer.train_rlhf(exp_data)
+                        # actor_loss:  tensor(-0.1350, device='cuda:0', dtype=torch.float16, grad_fn=<DivBackward0>)
+                        # critic_loss: tensor(0.0797, device='cuda:0', dtype=torch.float16, grad_fn=<DivBackward0>)
                         actor_loss_sum += actor_loss.item()
                         critic_loss_sum += critic_loss.item()
                         average_reward += exp_data["rewards"].mean()
 
+                        # unsupervised_training_enabled: False
                         if unsupervised_training_enabled:
                             unsup_loss = trainer.train_unsupervised(
                                 unsup_data, args.unsup_coef)
                             unsup_loss_sum += unsup_loss.item()
 
                         inner_iter += 1
+                        # args.enable_ema: False
                         if args.enable_ema:
                             moving_average(rlhf_engine.actor,
                                            rlhf_engine.actor_ema,
@@ -572,6 +614,9 @@ def main():
                 end = time.time()
                 training_time = end - training_start
                 e2e_time = training_time + trainer.generate_time * args.generation_batches  # it is an approximation, we did not include, e.g., rw forward time etc
+                # training_time: args.ppo_epochs 次训练的总耗时
+                # trainer.generate_time: trainer.generate_experience 用时
+                # args.generation_batches: 1
 
                 print_rank_0(
                     f'Epoch: {epoch} | Step: {step} | PPO Epoch: {ppo_ep+1} | Actor Loss: {actor_loss_sum/inner_iter} | Critic Loss: {critic_loss_sum/inner_iter} | Unsupervised Loss: {unsup_loss_sum/inner_iter}',
@@ -594,6 +639,7 @@ def main():
                     "-------------------------------------------------------------------------------------",
                     args.global_rank)
 
+                # args.enable_tensorboard: False
                 if args.enable_tensorboard and torch.distributed.get_rank(
                 ) == 0:
                     writer.add_scalar('reward',
@@ -613,6 +659,7 @@ def main():
                                       global_step=step)
                     writer.flush()
 
+            # args.actor_gradient_checkpointing: True
             if args.actor_gradient_checkpointing:
                 rlhf_engine.actor.gradient_checkpointing_disable()
 
@@ -621,6 +668,8 @@ def main():
             if not actor_overflow and not critic_overflow:
                 non_overflow_step_count += 1
 
+            # args.enable_test_mode: False
+            # args.test_stop_step: 0
             if args.enable_test_mode and non_overflow_step_count == args.test_stop_step:
                 break
 
@@ -628,6 +677,7 @@ def main():
             break
 
     if args.output_dir is not None:
+        # args.output_dir: './output_step3_llama2'
         print_rank_0('saving model ...')
         rlhf_engine.actor = convert_lora_to_linear_layer(rlhf_engine.actor)
         rlhf_engine.critic = convert_lora_to_linear_layer(rlhf_engine.critic)

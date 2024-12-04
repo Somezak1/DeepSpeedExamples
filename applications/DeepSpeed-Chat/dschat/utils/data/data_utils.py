@@ -496,16 +496,19 @@ class MiniDataset:
     def seperate(self):
         small_dataset = []
         for large_batch in self.dataset:
+            # large_batch: [[None]]
             if type(large_batch) == list or type(large_batch) == tuple:
                 large_size = len(large_batch[0])
             elif type(large_batch) == dict:
                 large_size = len(large_batch[list(large_batch.keys())[0]])
+                # 查看 batch size
             else:
                 large_size = len(large_batch)
             for i in range(0, large_size, self.small_batch_size):
                 if type(large_batch) == list or type(large_batch) == tuple:
                     small_dataset.append(
                         [x[i:i + self.small_batch_size] for x in large_batch])
+                    # small_dataset: [[[None]]]
                 elif type(large_batch) == dict:
                     small_dataset.append({
                         k: v[i:i + self.small_batch_size]

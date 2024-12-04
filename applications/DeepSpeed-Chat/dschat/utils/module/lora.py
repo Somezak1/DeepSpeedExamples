@@ -19,6 +19,9 @@ class LinearLayer_LoRA(nn.Module):
                  lora_scaling=1,
                  lora_droppout=0,
                  bias=None):
+        # lora_dim: 64
+        # lora_scaling: 1
+        # lora_droppout: 0
         super(LinearLayer_LoRA, self).__init__()
         self.weight = weight
         self.bias = bias
@@ -93,6 +96,7 @@ def convert_linear_layer_to_lora(model,
                                  lora_droppout=0):
     replace_name = []
     for name, module in model.named_modules():
+        # part_module_name: "layers."
         if isinstance(module, nn.Linear) and part_module_name in name:
             replace_name.append(name)
     for name in replace_name:

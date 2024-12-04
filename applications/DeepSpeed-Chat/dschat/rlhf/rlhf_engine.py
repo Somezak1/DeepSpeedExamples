@@ -41,6 +41,11 @@ class DeepSpeedRLHFEngine():
 
     def __init__(self, actor_model_name_or_path, critic_model_name_or_path,
                  tokenizer, args, num_total_iters):
+        # actor_model_name_or_path: '/data1/csw_model_weights/Llama-2-7b-chat-hf'
+        # critic_model_name_or_path: '/data0/csw/DeepSpeedExamples/applications/DeepSpeed-Chat/training/step2_reward_model_finetuning/output_step2_llama_7b_epoch1_lr9.65e-6'
+        # tokenizer: LlamaTokenizer(name_or_path='/data1/csw_model_weights/Llama-2-7b-chat-hf', vocab_size=32000, ...)
+        # num_total_iters: 23650
+
         self.args = args
         self.num_total_iters = num_total_iters
         self.tokenizer = tokenizer
@@ -50,6 +55,7 @@ class DeepSpeedRLHFEngine():
         self.ref = self._init_ref(
             actor_model_name_or_path=actor_model_name_or_path)
         self.actor_ema = None
+        # self.args.enable_ema: False
         if self.args.enable_ema:
             self.actor_ema = self._init_ema(
                 actor_model_name_or_path=actor_model_name_or_path)
@@ -57,6 +63,8 @@ class DeepSpeedRLHFEngine():
             critic_model_name_or_path=critic_model_name_or_path)
         self.reward = self._init_reward(
             critic_model_name_or_path=critic_model_name_or_path)
+
+        # self.args.critic_gradient_checkpointing: True
         if self.args.critic_gradient_checkpointing:
             self.critic.gradient_checkpointing_enable()
 
@@ -93,25 +101,59 @@ class DeepSpeedRLHFEngine():
             tokenizer=self.tokenizer,
             ds_config=ds_config,
             dropout=self.args.actor_dropout)
+        # actor_model: LlamaForCausalLM(
+        #   (model): LlamaModel(
+        #     (embed_tokens): Embedding(32008, 4096)
+        #     (layers): ModuleList(
+        #       (0-31): 32 x LlamaDecoderLayer(
+        #         (self_attn): LlamaSdpaAttention(
+        #           (q_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (k_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (v_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (o_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (rotary_emb): LlamaRotaryEmbedding()
+        #         )
+        #         (mlp): LlamaMLP(
+        #           (gate_proj): Linear(in_features=4096, out_features=11008, bias=False)
+        #           (up_proj): Linear(in_features=4096, out_features=11008, bias=False)
+        #           (down_proj): Linear(in_features=11008, out_features=4096, bias=False)
+        #           (act_fn): SiLU()
+        #         )
+        #         (input_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #         (post_attention_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #       )
+        #     )
+        #     (norm): LlamaRMSNorm((0,), eps=1e-06)
+        #     (rotary_emb): LlamaRotaryEmbedding()
+        #   )
+        #   (lm_head): Linear(in_features=4096, out_features=32008, bias=False)
+        # )
 
         # LoRA
+        # self.args.actor_lora_dim: 64
         if self.args.actor_lora_dim > 0:
             actor_model = convert_linear_layer_to_lora(
                 actor_model, self.args.actor_lora_module_name,
                 self.args.actor_lora_dim)
+            # self.args.only_optimize_lora: False
             if self.args.only_optimize_lora:
                 actor_model = only_optimize_lora_parameters(actor_model)
+                # 只优化 Q/K/V/O/Up/Gate/Down 这些层的 lora 参数
+                # 其余包括 input_layernorm/post_layernorm/norm/lm_head/embed_tokens 这些层中的参数都不优化
                 actor_model = make_model_gradient_checkpointing_compatible(
                     actor_model)
 
         # Optimizer
+        # self.args.offload: False
         AdamOptimizer = DeepSpeedCPUAdam if self.args.offload else FusedAdam
         optim_params = get_optimizer_grouped_parameters(
             actor_model, self.args.actor_weight_decay,
             self.args.actor_lora_learning_rate)
+        # 正常情况下会优化 Q/K/V/O/Up/Gate/Down 这些层的 lora 参数 和 input_layernorm/post_layernorm/norm/lm_head/embed_tokens 这些层中的参数
         optim = AdamOptimizer(optim_params,
                               lr=self.args.actor_learning_rate,
                               betas=(0.9, 0.95))
+        # self.args.actor_learning_rate: 9.65e-06
 
         # LR Scheduler
         lr_scheduler = get_scheduler(
@@ -127,6 +169,49 @@ class DeepSpeedRLHFEngine():
                                                 optimizer=optim,
                                                 lr_scheduler=lr_scheduler,
                                                 config=ds_config)
+        # actor_engine: DeepSpeedEngine(
+        #   (module): LlamaForCausalLM(
+        #     (model): LlamaModel(
+        #       (embed_tokens): Embedding(32008, 4096)
+        #       (layers): ModuleList(
+        #         (0-31): 32 x LlamaDecoderLayer(
+        #           (self_attn): LlamaSdpaAttention(
+        #             (q_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (k_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (v_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (o_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (rotary_emb): LlamaRotaryEmbedding()
+        #           )
+        #           (mlp): LlamaMLP(
+        #             (gate_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (up_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (down_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (act_fn): SiLU()
+        #           )
+        #           (input_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #           (post_attention_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #         )
+        #       )
+        #       (norm): LlamaRMSNorm((0,), eps=1e-06)
+        #       (rotary_emb): LlamaRotaryEmbedding()
+        #     )
+        #     (lm_head): Linear(in_features=4096, out_features=32008, bias=False)
+        #   )
+        # )
 
         log_init("Actor", stime=stime)
 
@@ -136,6 +221,7 @@ class DeepSpeedRLHFEngine():
         stime = log_init("Ref")
         # DS Config
         zero_stage = self.args.actor_zero_stage
+        # zero_stage: 3
         if zero_stage != 3:
             # If actor is ZeRO-3 then we use it for everything, otherwise assume we have enough memory for ref model
             zero_stage = 0
@@ -151,9 +237,65 @@ class DeepSpeedRLHFEngine():
         ref_model = create_hf_model(AutoModelForCausalLM,
                                     actor_model_name_or_path, self.tokenizer,
                                     ds_config)
+        # ref_model: LlamaForCausalLM(
+        #   (model): LlamaModel(
+        #     (embed_tokens): Embedding(32008, 4096)
+        #     (layers): ModuleList(
+        #       (0-31): 32 x LlamaDecoderLayer(
+        #         (self_attn): LlamaSdpaAttention(
+        #           (q_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (k_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (v_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (o_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (rotary_emb): LlamaRotaryEmbedding()
+        #         )
+        #         (mlp): LlamaMLP(
+        #           (gate_proj): Linear(in_features=4096, out_features=11008, bias=False)
+        #           (up_proj): Linear(in_features=4096, out_features=11008, bias=False)
+        #           (down_proj): Linear(in_features=11008, out_features=4096, bias=False)
+        #           (act_fn): SiLU()
+        #         )
+        #         (input_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #         (post_attention_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #       )
+        #     )
+        #     (norm): LlamaRMSNorm((0,), eps=1e-06)
+        #     (rotary_emb): LlamaRotaryEmbedding()
+        #   )
+        #   (lm_head): Linear(in_features=4096, out_features=32008, bias=False)
+        # )
 
         ref_engine, *_ = deepspeed.initialize(model=ref_model,
                                               config=ds_config)
+        # ref_engine: DeepSpeedEngine(
+        #   (module): LlamaForCausalLM(
+        #     (model): LlamaModel(
+        #       (embed_tokens): Embedding(32008, 4096)
+        #       (layers): ModuleList(
+        #         (0-31): 32 x LlamaDecoderLayer(
+        #           (self_attn): LlamaSdpaAttention(
+        #             (q_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #             (k_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #             (v_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #             (o_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #             (rotary_emb): LlamaRotaryEmbedding()
+        #           )
+        #           (mlp): LlamaMLP(
+        #             (gate_proj): Linear(in_features=4096, out_features=11008, bias=False)
+        #             (up_proj): Linear(in_features=4096, out_features=11008, bias=False)
+        #             (down_proj): Linear(in_features=11008, out_features=4096, bias=False)
+        #             (act_fn): SiLU()
+        #           )
+        #           (input_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #           (post_attention_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #         )
+        #       )
+        #       (norm): LlamaRMSNorm((0,), eps=1e-06)
+        #       (rotary_emb): LlamaRotaryEmbedding()
+        #     )
+        #     (lm_head): Linear(in_features=4096, out_features=32008, bias=False)
+        #   )
+        # )
 
         log_init("Ref", stime=stime)
         return ref_engine
@@ -189,6 +331,7 @@ class DeepSpeedRLHFEngine():
         return ema_engine
 
     def _init_critic(self, critic_model_name_or_path):
+        # critic_model_name_or_path: '/data0/csw/DeepSpeedExamples/applications/DeepSpeed-Chat/training/step2_reward_model_finetuning/output_step2_llama_7b_epoch1_lr9.65e-6'
         stime = log_init("Critic")
         ds_config = get_train_ds_config(
             offload=self.args.offload,
@@ -217,12 +360,45 @@ class DeepSpeedRLHFEngine():
         # Model
         critic_model = create_critic_model(
             model_name_or_path=critic_model_name_or_path,
+            # model_name_or_path: '/data0/csw/DeepSpeedExamples/applications/DeepSpeed-Chat/training/step2_reward_model_finetuning/output_step2_llama_7b_epoch1_lr9.65e-6'
             tokenizer=self.tokenizer,
+            # tokenizer: LlamaTokenizer(name_or_path='/data1/csw_model_weights/Llama-2-7b-chat-hf', vocab_size=32000, ...)
             ds_config=ds_eval_config,
             num_padding_at_beginning=self.args.num_padding_at_beginning,
+            # num_padding_at_beginning: 1
             rlhf_training=True,
             dropout=self.args.critic_dropout,
+            # dropout: None
             zero_stage=self.args.critic_zero_stage)
+            # zero_stage: 3
+
+        # critic_model: RewardModel(
+        #   (v_head): Linear(in_features=4096, out_features=1, bias=False)
+        #   (rwtransformer): LlamaModel(
+        #     (embed_tokens): Embedding(32008, 4096, padding_idx=2)
+        #     (layers): ModuleList(
+        #       (0-31): 32 x LlamaDecoderLayer(
+        #         (self_attn): LlamaAttention(
+        #           (q_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (k_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (v_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (o_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (rotary_emb): LlamaRotaryEmbedding()
+        #         )
+        #         (mlp): LlamaMLP(
+        #           (gate_proj): Linear(in_features=4096, out_features=11008, bias=False)
+        #           (up_proj): Linear(in_features=4096, out_features=11008, bias=False)
+        #           (down_proj): Linear(in_features=11008, out_features=4096, bias=False)
+        #           (act_fn): SiLU()
+        #         )
+        #         (input_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #         (post_attention_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #       )
+        #     )
+        #     (norm): LlamaRMSNorm((0,), eps=1e-06)
+        #     (rotary_emb): LlamaRotaryEmbedding()
+        #   )
+        # )
 
         # LoRA
         if self.args.critic_lora_dim > 0:
@@ -256,6 +432,49 @@ class DeepSpeedRLHFEngine():
                                                  optimizer=optim,
                                                  lr_scheduler=lr_scheduler,
                                                  config=ds_config)
+        # critic_engine: DeepSpeedEngine(
+        #   (module): RewardModel(
+        #     (v_head): Linear(in_features=4096, out_features=1, bias=False)
+        #     (rwtransformer): LlamaModel(
+        #       (embed_tokens): Embedding(32008, 4096, padding_idx=2)
+        #       (layers): ModuleList(
+        #         (0-31): 32 x LlamaDecoderLayer(
+        #           (self_attn): LlamaAttention(
+        #             (q_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (k_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (v_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (o_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (rotary_emb): LlamaRotaryEmbedding()
+        #           )
+        #           (mlp): LlamaMLP(
+        #             (gate_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (up_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (down_proj): LinearLayer_LoRA(
+        #               (lora_dropout): Identity()
+        #             )
+        #             (act_fn): SiLU()
+        #           )
+        #           (input_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #           (post_attention_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #         )
+        #       )
+        #       (norm): LlamaRMSNorm((0,), eps=1e-06)
+        #       (rotary_emb): LlamaRotaryEmbedding()
+        #     )
+        #   )
+        # )
 
         log_init("Critic", stime=stime)
         return critic_engine
@@ -282,15 +501,77 @@ class DeepSpeedRLHFEngine():
         # Model
         reward_model = create_critic_model(
             model_name_or_path=critic_model_name_or_path,
+            # model_name_or_path: '/data0/csw/DeepSpeedExamples/applications/DeepSpeed-Chat/training/step2_reward_model_finetuning/output_step2_llama_7b_epoch1_lr9.65e-6'
             tokenizer=self.tokenizer,
+            # tokenizer: LlamaTokenizer(name_or_path='/data1/csw_model_weights/Llama-2-7b-chat-hf', vocab_size=32000, ...)
             ds_config=ds_config,
             num_padding_at_beginning=self.args.num_padding_at_beginning,
+            # num_padding_at_beginning: 1
             rlhf_training=True,
             dropout=self.args.critic_dropout,
+            # dropout: None
             zero_stage=zero_stage)
+            # zero_stage: 3
+
+        # reward_model: RewardModel(
+        #   (v_head): Linear(in_features=4096, out_features=1, bias=False)
+        #   (rwtransformer): LlamaModel(
+        #     (embed_tokens): Embedding(32008, 4096, padding_idx=2)
+        #     (layers): ModuleList(
+        #       (0-31): 32 x LlamaDecoderLayer(
+        #         (self_attn): LlamaAttention(
+        #           (q_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (k_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (v_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (o_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #           (rotary_emb): LlamaRotaryEmbedding()
+        #         )
+        #         (mlp): LlamaMLP(
+        #           (gate_proj): Linear(in_features=4096, out_features=11008, bias=False)
+        #           (up_proj): Linear(in_features=4096, out_features=11008, bias=False)
+        #           (down_proj): Linear(in_features=11008, out_features=4096, bias=False)
+        #           (act_fn): SiLU()
+        #         )
+        #         (input_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #         (post_attention_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #       )
+        #     )
+        #     (norm): LlamaRMSNorm((0,), eps=1e-06)
+        #     (rotary_emb): LlamaRotaryEmbedding()
+        #   )
+        # )
 
         reward_engine, *_ = deepspeed.initialize(model=reward_model,
                                                  config=ds_config)
+        # reward_engine: DeepSpeedEngine(
+        #   (module): RewardModel(
+        #     (v_head): Linear(in_features=4096, out_features=1, bias=False)
+        #     (rwtransformer): LlamaModel(
+        #       (embed_tokens): Embedding(32008, 4096, padding_idx=2)
+        #       (layers): ModuleList(
+        #         (0-31): 32 x LlamaDecoderLayer(
+        #           (self_attn): LlamaAttention(
+        #             (q_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #             (k_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #             (v_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #             (o_proj): Linear(in_features=4096, out_features=4096, bias=False)
+        #             (rotary_emb): LlamaRotaryEmbedding()
+        #           )
+        #           (mlp): LlamaMLP(
+        #             (gate_proj): Linear(in_features=4096, out_features=11008, bias=False)
+        #             (up_proj): Linear(in_features=4096, out_features=11008, bias=False)
+        #             (down_proj): Linear(in_features=11008, out_features=4096, bias=False)
+        #             (act_fn): SiLU()
+        #           )
+        #           (input_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #           (post_attention_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+        #         )
+        #       )
+        #       (norm): LlamaRMSNorm((0,), eps=1e-06)
+        #       (rotary_emb): LlamaRotaryEmbedding()
+        #     )
+        #   )
+        # )
 
         log_init("Reward", stime=stime)
         return reward_engine

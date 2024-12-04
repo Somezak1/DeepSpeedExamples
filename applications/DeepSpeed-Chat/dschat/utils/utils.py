@@ -66,6 +66,7 @@ class ExponentialMovingAverage:
     def update(self, num):
         prev_ema = num if self.ema is None else self.ema
         self.ema = self.alpha * prev_ema + (1.0 - self.alpha) * num
+        # 第一次时 self.ema = num
         return self.ema
 
     def get(self):
@@ -73,7 +74,7 @@ class ExponentialMovingAverage:
 
 
 def get_tokenizer(model_name_or_path, fast_tokenizer=True):
-    if "llama" in model_name_or_path:
+    if "Llama" in model_name_or_path:
         from transformers.models.llama import LlamaTokenizer
         tokenizer = LlamaTokenizer.from_pretrained(
             model_name_or_path, fast_tokenizer=fast_tokenizer)
@@ -99,8 +100,7 @@ def load_hf_tokenizer(model_name_or_path,
         model_json = os.path.join(model_name_or_path, "config.json")
         if os.path.exists(model_json):
             model_json_file = json.load(open(model_json))
-            model_name = model_json_file.get("_name_or_path",
-                                             model_name_or_path)
+            model_name = model_name_or_path
             tokenizer = get_tokenizer(model_name,
                                       fast_tokenizer=fast_tokenizer)
     else:
@@ -216,38 +216,55 @@ def get_optimizer_grouped_parameters(
     ],
     lora_name_list=["lora_right_weight", "lora_left_weight"],
 ):
+    # weight_decay: 0.1
     optimizer_grouped_parameters = [
         {
             "params": [
                 p for n, p in model.named_parameters()
                 if (not any(nd in n.lower() for nd in no_decay_name_list)
-                    and p.requires_grad and not any(nd in n.lower()
-                                                    for nd in lora_name_list))
+                    and p.requires_grad and not any(nd in n.lower() for nd in lora_name_list))
             ],
             "weight_decay":
             weight_decay,
         },
+        # model.embed_tokens.weight
+        # lm_head.weight
         {
             "params": [
                 p for n, p in model.named_parameters()
                 if (not any(nd in n.lower() for nd in no_decay_name_list)
-                    and p.requires_grad and any(nd in n.lower()
-                                                for nd in lora_name_list))
+                    and p.requires_grad and any(nd in n.lower() for nd in lora_name_list))
             ],
             "weight_decay":
             weight_decay,
             "lr":
             lora_lr
         },
+        # model.layers.i.self_attn.q_proj.lora_right_weight
+        # model.layers.i.self_attn.q_proj.lora_left_weight
+        # model.layers.i.self_attn.k_proj.lora_right_weight
+        # model.layers.i.self_attn.k_proj.lora_left_weight
+        # model.layers.i.self_attn.v_proj.lora_right_weight
+        # model.layers.i.self_attn.v_proj.lora_left_weight
+        # model.layers.i.self_attn.o_proj.lora_right_weight
+        # model.layers.i.self_attn.o_proj.lora_left_weight
+        # model.layers.i.mlp.gate_proj.lora_right_weight
+        # model.layers.i.mlp.gate_proj.lora_left_weight
+        # model.layers.i.mlp.up_proj.lora_right_weight
+        # model.layers.i.mlp.up_proj.lora_left_weight
+        # model.layers.i.mlp.down_proj.lora_right_weight
+        # model.layers.i.mlp.down_proj.lora_left_weight
         {
             "params": [
                 p for n, p in model.named_parameters()
-                if (any(nd in n.lower()
-                        for nd in no_decay_name_list) and p.requires_grad)
+                if (any(nd in n.lower() for nd in no_decay_name_list) and p.requires_grad)
             ],
             "weight_decay":
             0.0,
         },
+        # model.layers.i.input_layernorm.weight
+        # model.layers.i.post_attention_layernorm.weight
+        # model.norm.weight
     ]
 
     non_empty_groups = []

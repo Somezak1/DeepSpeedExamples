@@ -56,16 +56,28 @@ def print_throughput_step3(actor_model,
 
         actor_num_layers, actor_hidden_size, actor_vocab_size = get_hf_configs(
             actor_hf_config)
+        # actor_num_layers:
+        # actor_hidden_size:
+        # actor_vocab_size:
         critic_num_layers, critic_hidden_size, critic_vocab_size = get_hf_configs(
             critic_hf_config)
+        # critic_num_layers:
+        # critic_hidden_size:
+        # critic_vocab_size:
 
         gpus_per_model = torch.distributed.get_world_size()
         seq_length = args.max_answer_seq_len + args.max_prompt_seq_len
+        # seq_length:
         batch_size = args.per_device_generation_batch_size * args.generation_batches * args.ppo_epochs * gpus_per_model * 1 if args.unsupervised_dataset_name is None else 2
+        # args.unsupervised_training_enabled: None
+        # batch_size:
         samples_per_second = batch_size / e2e_time
 
         actor_checkpoint_activations_factor = 4 if args.actor_gradient_checkpointing else 3
+        # actor_checkpoint_activations_factor:
         critic_checkpoint_activations_factor = 4 if args.critic_gradient_checkpointing else 3
+        # critic_checkpoint_activations_factor:
+
         if args.actor_lora_dim > 0:
             k = args.actor_lora_dim * 2 / actor_hidden_size
             actor_checkpoint_activations_factor -= (1 - k)

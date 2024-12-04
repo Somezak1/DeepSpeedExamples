@@ -126,11 +126,43 @@ def create_critic_model(model_name_or_path,
     # OPT model family always put a padding token at the beginning of the sequence,
     # we did not see this in other models but not sure if it is a general rule
 
+    # model_name_or_path: '/data0/csw/DeepSpeedExamples/applications/DeepSpeed-Chat/training/step2_reward_model_finetuning/output_step2_llama_7b_epoch1_lr9.65e-6'
+    # tokenizer: LlamaTokenizer(name_or_path='/data1/csw_model_weights/Llama-2-7b-chat-hf', vocab_size=32000, ...)
+    # num_padding_at_beginning: 1
+    # rlhf_training: True
+    # dropout: None
+    # zero_stage: 3
+    # compute_fp32_loss: False
+
     import time
 
     start = time.time()
     critic_model = create_hf_model(AutoModel, model_name_or_path, tokenizer,
                                    ds_config, rlhf_training, dropout)
+    # critic_model: LlamaModel(
+    #   (embed_tokens): Embedding(32008, 4096, padding_idx=2)
+    #   (layers): ModuleList(
+    #     (0-31): 32 x LlamaDecoderLayer(
+    #       (self_attn): LlamaAttention(
+    #         (q_proj): Linear(in_features=4096, out_features=4096, bias=False)
+    #         (k_proj): Linear(in_features=4096, out_features=4096, bias=False)
+    #         (v_proj): Linear(in_features=4096, out_features=4096, bias=False)
+    #         (o_proj): Linear(in_features=4096, out_features=4096, bias=False)
+    #         (rotary_emb): LlamaRotaryEmbedding()
+    #       )
+    #       (mlp): LlamaMLP(
+    #         (gate_proj): Linear(in_features=4096, out_features=11008, bias=False)
+    #         (up_proj): Linear(in_features=4096, out_features=11008, bias=False)
+    #         (down_proj): Linear(in_features=11008, out_features=4096, bias=False)
+    #         (act_fn): SiLU()
+    #       )
+    #       (input_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+    #       (post_attention_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+    #     )
+    #   )
+    #   (norm): LlamaRMSNorm((0,), eps=1e-06)
+    #   (rotary_emb): LlamaRotaryEmbedding()
+    # )
     end = time.time()
     print_rank_0(f">Creating model from_config took {end - start} seconds",
                  None)
@@ -140,7 +172,35 @@ def create_critic_model(model_name_or_path,
         tokenizer,
         num_padding_at_beginning=num_padding_at_beginning,
         compute_fp32_loss=compute_fp32_loss)
+    # RewardModel(
+    #   (v_head): Linear(in_features=4096, out_features=1, bias=False)
+    #   (rwtransformer): LlamaModel(
+    #     (embed_tokens): Embedding(32008, 4096, padding_idx=2)
+    #     (layers): ModuleList(
+    #       (0-31): 32 x LlamaDecoderLayer(
+    #         (self_attn): LlamaAttention(
+    #           (q_proj): Linear(in_features=4096, out_features=4096, bias=False)
+    #           (k_proj): Linear(in_features=4096, out_features=4096, bias=False)
+    #           (v_proj): Linear(in_features=4096, out_features=4096, bias=False)
+    #           (o_proj): Linear(in_features=4096, out_features=4096, bias=False)
+    #           (rotary_emb): LlamaRotaryEmbedding()
+    #         )
+    #         (mlp): LlamaMLP(
+    #           (gate_proj): Linear(in_features=4096, out_features=11008, bias=False)
+    #           (up_proj): Linear(in_features=4096, out_features=11008, bias=False)
+    #           (down_proj): Linear(in_features=11008, out_features=4096, bias=False)
+    #           (act_fn): SiLU()
+    #         )
+    #         (input_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+    #         (post_attention_layernorm): LlamaRMSNorm((0,), eps=1e-06)
+    #       )
+    #     )
+    #     (norm): LlamaRMSNorm((0,), eps=1e-06)
+    #     (rotary_emb): LlamaRotaryEmbedding()
+    #   )
+    # )
 
+    # rlhf_training: True
     if rlhf_training:
         # load critic model from checkpoint
 
