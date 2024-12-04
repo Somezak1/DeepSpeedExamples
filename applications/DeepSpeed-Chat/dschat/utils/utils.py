@@ -73,7 +73,7 @@ class ExponentialMovingAverage:
 
 
 def get_tokenizer(model_name_or_path, fast_tokenizer=True):
-    if "llama" in model_name_or_path:
+    if "Llama" in model_name_or_path:
         from transformers.models.llama import LlamaTokenizer
         tokenizer = LlamaTokenizer.from_pretrained(
             model_name_or_path, fast_tokenizer=fast_tokenizer)
@@ -99,8 +99,7 @@ def load_hf_tokenizer(model_name_or_path,
         model_json = os.path.join(model_name_or_path, "config.json")
         if os.path.exists(model_json):
             model_json_file = json.load(open(model_json))
-            model_name = model_json_file.get("_name_or_path",
-                                             model_name_or_path)
+            model_name = model_name_or_path
             tokenizer = get_tokenizer(model_name,
                                       fast_tokenizer=fast_tokenizer)
     else:

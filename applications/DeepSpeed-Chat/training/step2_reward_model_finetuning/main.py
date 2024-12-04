@@ -209,8 +209,11 @@ def parse_args():
 
 
 def main():
+    # 调试脚本:
+    # CUDA_VISIBLE_DEVICES=2 deepspeed main.py --data_path Dahoas/rm-static --data_split 2,4,4 --model_name_or_path /data1/csw_model_weights/Llama-2-7b-chat-hf --per_device_train_batch_size 8 --per_device_eval_batch_size 8 --max_seq_len 512 --learning_rate 9.65e-6 --weight_decay 0.1 --num_padding_at_beginning 0 --num_train_epochs 1 --gradient_accumulation_steps 1 --lr_scheduler_type cosine --num_warmup_steps 0 --seed 1234 --gradient_checkpointing --zero_stage 3 --deepspeed --lora_dim 128 --lora_module_name layers. --output_dir ./output_step2_llama_7b_epoch1_lr9.65e-6
     args = parse_args()
 
+    # args.local_rank: 0
     if args.local_rank == -1:
         device = torch.device(get_accelerator().device_name())
     else:
@@ -220,6 +223,7 @@ def main():
         # torch.distributed.init_process_group(backend='nccl')
         deepspeed.init_distributed()
 
+    # args.global_rank: 0
     args.global_rank = torch.distributed.get_rank()
 
     ds_config = get_train_ds_config(offload=args.offload,
@@ -233,6 +237,38 @@ def main():
     ds_config[
         'train_batch_size'] = args.per_device_train_batch_size * torch.distributed.get_world_size(
         ) * args.gradient_accumulation_steps
+    # ds_config: {
+    #     'train_batch_size': 8,
+    #     'train_micro_batch_size_per_gpu': 8,
+    #     'steps_per_print': 10,
+    #     'zero_optimization': {
+    #         'stage': 3,
+    #         'overlap_comm': True,
+    #         'offload_param': {'device': 'none'},
+    #         'offload_optimizer': {'device': 'none'},
+    #         'stage3_param_persistence_threshold': 10000.0,
+    #         'stage3_max_live_parameters': 30000000.0,
+    #         'stage3_prefetch_bucket_size': 30000000.0,
+    #         'memory_efficient_linear': False
+    #     },
+    #     'fp16': {'enabled': True, 'loss_scale_window': 100},
+    #     'gradient_clipping': 1.0,
+    #     'prescale_gradients': False,
+    #     'wall_clock_breakdown': False,
+    #     'hybrid_engine': {
+    #         'enabled': False,
+    #         'max_out_tokens': 512,
+    #         'inference_tp_size': 1,
+    #         'release_inference_cache': False,
+    #         'pin_parameters': True,
+    #         'tp_gather_partition_size': 8
+    #     },
+    #     'tensorboard': {
+    #         'enabled': False,
+    #         'output_path': 'step2_tensorboard/ds_tensorboard_logs/',
+    #         'job_name': 'step2_model_tensorboard'
+    #     }
+    # }
 
     # If passed along, set the training seed now.
     set_random_seed(args.seed)
@@ -272,6 +308,7 @@ def main():
         force_optimize_params.extend(
             ['rwtransformer.ln_f.weight', 'rwtransformer.ln_f.bias'])
 
+    # args.lora_dim: 128
     if args.lora_dim > 0:
         rm_model = convert_linear_layer_to_lora(rm_model,
                                                 args.lora_module_name,
@@ -287,9 +324,17 @@ def main():
         args.local_rank, args.data_path, args.data_split,
         args.data_output_path, train_phase, args.seed, tokenizer,
         args.max_seq_len)
+    # args.local_rank: 0
+    # args.data_path: ['Dahoas/rm-static']
+    # args.data_split: '2,4,4'
+    # args.data_output_path: '/tmp/data_files/'
+    # train_phase: 2
+    # args.seed: 1234
+    # args.max_seq_len: 512
 
     # DataLoaders creation:
     data_collator = DataCollatorReward()
+    # args.local_rank: 0
     if args.local_rank == -1:
         train_sampler = RandomSampler(train_dataset)
         eval_sampler = SequentialSampler(eval_dataset)
@@ -313,11 +358,15 @@ def main():
         rejected_scores = 0.
         for _step, _batch in enumerate(dataloader):
             _batch = to_device(_batch, device)
+            # _batch["input_ids"].size():      [16, 512]
+            # _batch["attention_mask"].size(): [16, 512]
             with torch.no_grad():
                 _outputs = model(**_batch)
 
             chosen = _outputs["chosen_mean_scores"]
+            # chosen.size(): [8]
             rejected = _outputs["rejected_mean_scores"]
+            # rejected.size(): [8]
             correct_predictions += (chosen > rejected).sum()
             total_predictions += chosen.shape[0]
             chosen_scores += _outputs["chosen_mean_scores"].mean().float()
@@ -325,9 +374,13 @@ def main():
             if (_step + 1) == eval_iters:
                 break
         _acc = correct_predictions / total_predictions
+        # _acc: 所有样本的预测准确率
         chosen_scores = chosen_scores / (_step + 1)
+        # chosen_scores: 所有样本 chosen_mean_scores 的平均值
         rejected_scores = rejected_scores / (_step + 1)
+        # rejected_scores: 所有样本 rejected_mean_scores 的平均值
         try:
+            # 在数据并行组内对这些统计指标求平均
             _acc = get_all_reduce_mean(_acc).item()
             chosen_scores = get_all_reduce_mean(chosen_scores).item()
             rejected_scores = get_all_reduce_mean(rejected_scores).item()
@@ -339,6 +392,7 @@ def main():
     optimizer_grouped_parameters = get_optimizer_grouped_parameters(
         rm_model, args.weight_decay, args.lora_learning_rate)
 
+    # args.offload: False
     AdamOptimizer = DeepSpeedCPUAdam if args.offload else FusedAdam
     optimizer = AdamOptimizer(optimizer_grouped_parameters,
                               lr=args.learning_rate,
@@ -346,6 +400,10 @@ def main():
 
     num_update_steps_per_epoch = math.ceil(
         len(train_dataloader) / args.gradient_accumulation_steps)
+    # len(train_dataset): 30502
+    # len(train_dataloader): 3813
+    # args.gradient_accumulation_steps: 1
+    # num_update_steps_per_epoch: 3813
 
     lr_scheduler = get_scheduler(
         name=args.lr_scheduler_type,
@@ -387,6 +445,8 @@ def main():
         mean_loss = 0
         for step, batch in enumerate(train_dataloader):
             batch = to_device(batch, device)
+            # batch["input_ids"].size():      [16, 512]
+            # batch["attention_mask"].size(): [16, 512]
             outputs = rm_model(**batch, use_cache=False)
             loss = outputs["loss"]
             rm_model.backward(loss)
@@ -395,7 +455,9 @@ def main():
             total_micro_steps += 1
             gas_boundary = (total_micro_steps %
                             args.gradient_accumulation_steps == 0)
+            # args.gradient_accumulation_steps: 1
             total_steps = total_micro_steps // args.gradient_accumulation_steps
+            # args.eval_interval: 0
             if args.eval_interval and gas_boundary and (
                     total_steps % args.eval_interval == 0):
                 print_rank_0(f"Iter {total_steps}: Evaluating reward",

@@ -386,13 +386,44 @@ def create_prompt_dataset(local_rank,
 class DataCollatorReward:
 
     def __call__(self, data):
+        # data: [
+        #     (tensor11, tensor12, tensor13, tensor14),
+        #     (tensor21, tensor22, tensor23, tensor24),
+        #     (tensor31, tensor32, tensor33, tensor34),
+        #     (tensor41, tensor42, tensor43, tensor44),
+        #     (tensor51, tensor52, tensor53, tensor54),
+        #     (tensor61, tensor62, tensor63, tensor64),
+        #     (tensor71, tensor72, tensor73, tensor74),
+        #     (tensor81, tensor82, tensor83, tensor84),
+        # ]
+        # tensor 的尺寸都是 [1, 512]
         batch = {}
         batch["input_ids"] = torch.cat([f[0]
                                         for f in data] + [f[2] for f in data],
                                        dim=0)
+        # batch["input_ids"].size(): [16, 512]
+        # batch["input_ids"]: [
+        #     tensor11,
+        #     tensor21,
+        #     tensor31,
+        #     tensor41,
+        #     tensor51,
+        #     tensor61,
+        #     tensor71,
+        #     tensor81,
+        #     tensor13,
+        #     tensor23,
+        #     tensor33,
+        #     tensor43,
+        #     tensor53,
+        #     tensor63,
+        #     tensor73,
+        #     tensor83,
+        # ]
         batch["attention_mask"] = torch.cat([f[1] for f in data] +
                                             [f[3] for f in data],
                                             dim=0)
+        # batch["attention_mask"].size(): [16, 512]
         return batch
 
 

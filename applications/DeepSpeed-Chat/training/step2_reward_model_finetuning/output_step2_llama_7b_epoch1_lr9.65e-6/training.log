@@ -1,0 +1,487 @@
+[2024-11-11 16:21:26,422] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-11-11 16:21:28,485] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+Detected VISIBLE_DEVICES=2,3,4,5: setting --include=localhost:2,3,4,5
+[2024-11-11 16:21:28,486] [INFO] [runner.py:607:main] cmd = /data3/miniforge-pypy3/envs/csw_deepspeed_chat/bin/python3.10 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMiwgMywgNCwgNV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None main.py --data_path Dahoas/rm-static --data_split 2,4,4 --model_name_or_path /data1/csw_model_weights/Llama-2-7b-chat-hf --per_device_train_batch_size 8 --per_device_eval_batch_size 8 --max_seq_len 512 --learning_rate 9.65e-6 --weight_decay 0.1 --num_padding_at_beginning 0 --num_train_epochs 1 --gradient_accumulation_steps 1 --lr_scheduler_type cosine --num_warmup_steps 0 --seed 1234 --gradient_checkpointing --zero_stage 2 --deepspeed --offload --output_dir ./output_step2_llama_7b_epoch1_lr9.65e-6
+[2024-11-11 16:21:29,985] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-11-11 16:21:32,091] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [2, 3, 4, 5]}
+[2024-11-11 16:21:32,092] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=4, node_rank=0
+[2024-11-11 16:21:32,092] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3]})
+[2024-11-11 16:21:32,092] [INFO] [launch.py:164:main] dist_world_size=4
+[2024-11-11 16:21:32,092] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=2,3,4,5
+[2024-11-11 16:21:32,092] [INFO] [launch.py:256:main] process 1994031 spawned with command: ['/data3/miniforge-pypy3/envs/csw_deepspeed_chat/bin/python3.10', '-u', 'main.py', '--local_rank=0', '--data_path', 'Dahoas/rm-static', '--data_split', '2,4,4', '--model_name_or_path', '/data1/csw_model_weights/Llama-2-7b-chat-hf', '--per_device_train_batch_size', '8', '--per_device_eval_batch_size', '8', '--max_seq_len', '512', '--learning_rate', '9.65e-6', '--weight_decay', '0.1', '--num_padding_at_beginning', '0', '--num_train_epochs', '1', '--gradient_accumulation_steps', '1', '--lr_scheduler_type', 'cosine', '--num_warmup_steps', '0', '--seed', '1234', '--gradient_checkpointing', '--zero_stage', '2', '--deepspeed', '--offload', '--output_dir', './output_step2_llama_7b_epoch1_lr9.65e-6']
+[2024-11-11 16:21:32,093] [INFO] [launch.py:256:main] process 1994032 spawned with command: ['/data3/miniforge-pypy3/envs/csw_deepspeed_chat/bin/python3.10', '-u', 'main.py', '--local_rank=1', '--data_path', 'Dahoas/rm-static', '--data_split', '2,4,4', '--model_name_or_path', '/data1/csw_model_weights/Llama-2-7b-chat-hf', '--per_device_train_batch_size', '8', '--per_device_eval_batch_size', '8', '--max_seq_len', '512', '--learning_rate', '9.65e-6', '--weight_decay', '0.1', '--num_padding_at_beginning', '0', '--num_train_epochs', '1', '--gradient_accumulation_steps', '1', '--lr_scheduler_type', 'cosine', '--num_warmup_steps', '0', '--seed', '1234', '--gradient_checkpointing', '--zero_stage', '2', '--deepspeed', '--offload', '--output_dir', './output_step2_llama_7b_epoch1_lr9.65e-6']
+[2024-11-11 16:21:32,093] [INFO] [launch.py:256:main] process 1994033 spawned with command: ['/data3/miniforge-pypy3/envs/csw_deepspeed_chat/bin/python3.10', '-u', 'main.py', '--local_rank=2', '--data_path', 'Dahoas/rm-static', '--data_split', '2,4,4', '--model_name_or_path', '/data1/csw_model_weights/Llama-2-7b-chat-hf', '--per_device_train_batch_size', '8', '--per_device_eval_batch_size', '8', '--max_seq_len', '512', '--learning_rate', '9.65e-6', '--weight_decay', '0.1', '--num_padding_at_beginning', '0', '--num_train_epochs', '1', '--gradient_accumulation_steps', '1', '--lr_scheduler_type', 'cosine', '--num_warmup_steps', '0', '--seed', '1234', '--gradient_checkpointing', '--zero_stage', '2', '--deepspeed', '--offload', '--output_dir', './output_step2_llama_7b_epoch1_lr9.65e-6']
+[2024-11-11 16:21:32,093] [INFO] [launch.py:256:main] process 1994034 spawned with command: ['/data3/miniforge-pypy3/envs/csw_deepspeed_chat/bin/python3.10', '-u', 'main.py', '--local_rank=3', '--data_path', 'Dahoas/rm-static', '--data_split', '2,4,4', '--model_name_or_path', '/data1/csw_model_weights/Llama-2-7b-chat-hf', '--per_device_train_batch_size', '8', '--per_device_eval_batch_size', '8', '--max_seq_len', '512', '--learning_rate', '9.65e-6', '--weight_decay', '0.1', '--num_padding_at_beginning', '0', '--num_train_epochs', '1', '--gradient_accumulation_steps', '1', '--lr_scheduler_type', 'cosine', '--num_warmup_steps', '0', '--seed', '1234', '--gradient_checkpointing', '--zero_stage', '2', '--deepspeed', '--offload', '--output_dir', './output_step2_llama_7b_epoch1_lr9.65e-6']
+[2024-11-11 16:21:33,676] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-11-11 16:21:33,706] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-11-11 16:21:33,707] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-11-11 16:21:33,717] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-11-11 16:21:36,133] [INFO] [comm.py:652:init_distributed] cdb=None
+[2024-11-11 16:21:36,133] [INFO] [comm.py:683:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2024-11-11 16:21:36,211] [INFO] [comm.py:652:init_distributed] cdb=None
+[rank2]:[W1111 16:21:36.616326711 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[2024-11-11 16:21:36,342] [INFO] [comm.py:652:init_distributed] cdb=None
+[2024-11-11 16:21:36,342] [INFO] [comm.py:652:init_distributed] cdb=None
+[rank1]:[W1111 16:21:36.746417553 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank3]:[W1111 16:21:36.746431593 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank0]:[W1111 16:21:36.940934041 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.06s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.91s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:04<00:04,  4.13s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:04<00:04,  4.23s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  1.96s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.12s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.30s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.54s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.34s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.60s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.34s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.62s/it]
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+>Creating model from_config took 37.11742568016052 seconds
+Creating prompt dataset ['Dahoas/rm-static'], reload=False
+Generating train split:   0%|          | 0/76256 [00:00<?, ? examples/s]Generating train split:  47%|████▋     | 36000/76256 [00:00<00:00, 351896.56 examples/s]Generating train split: 100%|██████████| 76256/76256 [00:00<00:00, 243214.12 examples/s]Generating train split: 100%|██████████| 76256/76256 [00:00<00:00, 254107.14 examples/s]
+Generating test split:   0%|          | 0/5103 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5103/5103 [00:00<00:00, 204368.69 examples/s]
+Creating dataset Dahoas_rm_static for train_phase=2 size=30502
+Creating dataset Dahoas_rm_static for train_phase=2 size=2041
+/data0/csw/DeepSpeedExamples/applications/DeepSpeed-Chat/dschat/utils/data/data_utils.py:383: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  return torch.load(train_fname), torch.load(eval_fname)
+/data0/csw/DeepSpeedExamples/applications/DeepSpeed-Chat/dschat/utils/data/data_utils.py:383: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  return torch.load(train_fname), torch.load(eval_fname)
+/data0/csw/DeepSpeedExamples/applications/DeepSpeed-Chat/dschat/utils/data/data_utils.py:383: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  return torch.load(train_fname), torch.load(eval_fname)
+/data0/csw/DeepSpeedExamples/applications/DeepSpeed-Chat/dschat/utils/data/data_utils.py:383: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  return torch.load(train_fname), torch.load(eval_fname)
+Using /home/icksys/.cache/torch_extensions/py310_cu121 as PyTorch extensions root...
+Emitting ninja build file /home/icksys/.cache/torch_extensions/py310_cu121/cpu_adam/build.ninja...
+Building extension module cpu_adam...
+Allowing ninja to set a default number of workers... (overridable by setting the environment variable MAX_JOBS=N)
+Using /home/icksys/.cache/torch_extensions/py310_cu121 as PyTorch extensions root...
+Using /home/icksys/.cache/torch_extensions/py310_cu121 as PyTorch extensions root...
+Using /home/icksys/.cache/torch_extensions/py310_cu121 as PyTorch extensions root...
+[1/3] c++ -MMD -MF cpu_adam.o.d -DTORCH_EXTENSION_NAME=cpu_adam -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\"_gcc\" -DPYBIND11_STDLIB=\"_libstdcpp\" -DPYBIND11_BUILD_ABI=\"_cxxabi1011\" -I/data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/deepspeed/ops/csrc/includes -isystem /data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/torch/include -isystem /data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/torch/include/torch/csrc/api/include -isystem /data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/torch/include/TH -isystem /data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/torch/include/THC -isystem /data3/miniforge-pypy3/envs/csw_deepspeed_chat/include/python3.10 -D_GLIBCXX_USE_CXX11_ABI=0 -fPIC -std=c++17 -O3 -std=c++17 -g -Wno-reorder -L/usr/local/cuda/lib64 -lcudart -lcublas -g -march=native -fopenmp -D__AVX512__ -D__ENABLE_CUDA__ -DBF16_AVAILABLE -c /data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/deepspeed/ops/csrc/adam/cpu_adam.cpp -o cpu_adam.o 
+[2/3] c++ -MMD -MF cpu_adam_impl.o.d -DTORCH_EXTENSION_NAME=cpu_adam -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\"_gcc\" -DPYBIND11_STDLIB=\"_libstdcpp\" -DPYBIND11_BUILD_ABI=\"_cxxabi1011\" -I/data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/deepspeed/ops/csrc/includes -isystem /data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/torch/include -isystem /data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/torch/include/torch/csrc/api/include -isystem /data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/torch/include/TH -isystem /data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/torch/include/THC -isystem /data3/miniforge-pypy3/envs/csw_deepspeed_chat/include/python3.10 -D_GLIBCXX_USE_CXX11_ABI=0 -fPIC -std=c++17 -O3 -std=c++17 -g -Wno-reorder -L/usr/local/cuda/lib64 -lcudart -lcublas -g -march=native -fopenmp -D__AVX512__ -D__ENABLE_CUDA__ -DBF16_AVAILABLE -c /data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/deepspeed/ops/csrc/adam/cpu_adam_impl.cpp -o cpu_adam_impl.o 
+[3/3] c++ cpu_adam.o cpu_adam_impl.o -shared -lcurand -L/usr/local/cuda/lib64 -L/data3/miniforge-pypy3/envs/csw_deepspeed_chat/lib/python3.10/site-packages/torch/lib -lc10 -ltorch_cpu -ltorch -ltorch_python -o cpu_adam.so
+Loading extension module cpu_adam...
+Time to load cpu_adam op: 27.125348567962646 seconds
+Adam Optimizer #0 is created with AVX512 arithmetic capability.
+Config: alpha=0.000010, betas=(0.900000, 0.950000), weight_decay=0.000000, adam_w=1
+[2024-11-11 16:24:21,035] [INFO] [config.py:733:__init__] Config mesh_device None world_size = 4
+Loading extension module cpu_adam...
+Time to load cpu_adam op: 26.617639780044556 seconds
+Adam Optimizer #0 is created with AVX512 arithmetic capability.
+Config: alpha=0.000010, betas=(0.900000, 0.950000), weight_decay=0.000000, adam_w=1
+[2024-11-11 16:24:21,040] [INFO] [config.py:733:__init__] Config mesh_device None world_size = 4
+Loading extension module cpu_adam...
+Time to load cpu_adam op: 26.50394296646118 seconds
+Adam Optimizer #0 is created with AVX512 arithmetic capability.
+Config: alpha=0.000010, betas=(0.900000, 0.950000), weight_decay=0.000000, adam_w=1
+[2024-11-11 16:24:21,086] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed info: version=0.15.4, git-hash=unknown, git-branch=unknown
+[2024-11-11 16:24:21,087] [INFO] [comm.py:677:init_distributed] Distributed backend already initialized
+[2024-11-11 16:24:21,087] [INFO] [config.py:733:__init__] Config mesh_device None world_size = 4
+Loading extension module cpu_adam...
+Time to load cpu_adam op: 27.195913314819336 seconds
+Adam Optimizer #0 is created with AVX512 arithmetic capability.
+Config: alpha=0.000010, betas=(0.900000, 0.950000), weight_decay=0.000000, adam_w=1
+[2024-11-11 16:24:21,134] [INFO] [config.py:733:__init__] Config mesh_device None world_size = 4
+[2024-11-11 16:24:37,363] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed Flops Profiler Enabled: False
+[2024-11-11 16:24:37,364] [INFO] [logging.py:128:log_dist] [Rank 0] Using client Optimizer as basic optimizer
+[2024-11-11 16:24:37,364] [INFO] [logging.py:128:log_dist] [Rank 0] Removing param_group that has no 'params' in the basic Optimizer
+[2024-11-11 16:24:37,373] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed Basic Optimizer = DeepSpeedCPUAdam
+[2024-11-11 16:24:37,373] [INFO] [utils.py:59:is_zero_supported_optimizer] Checking ZeRO support for optimizer=DeepSpeedCPUAdam type=<class 'deepspeed.ops.adam.cpu_adam.DeepSpeedCPUAdam'>
+[2024-11-11 16:24:37,373] [INFO] [logging.py:128:log_dist] [Rank 0] Creating torch.float16 ZeRO stage 2 optimizer
+[2024-11-11 16:24:37,373] [INFO] [stage_1_and_2.py:149:__init__] Reduce bucket size 500000000
+[2024-11-11 16:24:37,373] [INFO] [stage_1_and_2.py:150:__init__] Allgather bucket size 500000000
+[2024-11-11 16:24:37,373] [INFO] [stage_1_and_2.py:151:__init__] CPU Offload: True
+[2024-11-11 16:24:37,373] [INFO] [stage_1_and_2.py:152:__init__] Round robin gradient partitioning: False
+[2024-11-11 16:24:58,662] [INFO] [utils.py:781:see_memory_usage] Before initializing optimizer states
+[2024-11-11 16:24:58,663] [INFO] [utils.py:782:see_memory_usage] MA 12.55 GB         Max_MA 12.55 GB         CA 12.56 GB         Max_CA 13 GB 
+[2024-11-11 16:24:58,663] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 161.33 GB, percent = 16.0%
+[2024-11-11 16:24:59,397] [INFO] [utils.py:781:see_memory_usage] After initializing optimizer states
+[2024-11-11 16:24:59,398] [INFO] [utils.py:782:see_memory_usage] MA 12.55 GB         Max_MA 12.55 GB         CA 12.56 GB         Max_CA 13 GB 
+[2024-11-11 16:24:59,398] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 168.28 GB, percent = 16.7%
+[2024-11-11 16:24:59,398] [INFO] [stage_1_and_2.py:544:__init__] optimizer state initialized
+[2024-11-11 16:24:59,965] [INFO] [utils.py:781:see_memory_usage] After initializing ZeRO optimizer
+[2024-11-11 16:24:59,966] [INFO] [utils.py:782:see_memory_usage] MA 12.55 GB         Max_MA 12.55 GB         CA 12.56 GB         Max_CA 13 GB 
+[2024-11-11 16:24:59,966] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 168.39 GB, percent = 16.7%
+[2024-11-11 16:24:59,970] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed Final Optimizer = DeepSpeedZeroOptimizer
+[2024-11-11 16:24:59,970] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed using client LR scheduler
+[2024-11-11 16:24:59,970] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed LR Scheduler = <torch.optim.lr_scheduler.LambdaLR object at 0x7f5a9e7ac610>
+[2024-11-11 16:24:59,970] [INFO] [logging.py:128:log_dist] [Rank 0] step=0, skipped=0, lr=[9.65e-06, 9.65e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:24:59,971] [INFO] [config.py:999:print] DeepSpeedEngine configuration:
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   activation_checkpointing_config  {
+    "partition_activations": false, 
+    "contiguous_memory_optimization": false, 
+    "cpu_checkpointing": false, 
+    "number_checkpoints": null, 
+    "synchronize_checkpoint_boundary": false, 
+    "profile": false
+}
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   aio_config ................... {'block_size': 1048576, 'queue_depth': 8, 'thread_count': 1, 'single_submit': False, 'overlap_events': True, 'use_gds': False}
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   amp_enabled .................. False
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   amp_params ................... False
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   autotuning_config ............ {
+    "enabled": false, 
+    "start_step": null, 
+    "end_step": null, 
+    "metric_path": null, 
+    "arg_mappings": null, 
+    "metric": "throughput", 
+    "model_info": null, 
+    "results_dir": "autotuning_results", 
+    "exps_dir": "autotuning_exps", 
+    "overwrite": true, 
+    "fast": true, 
+    "start_profile_step": 3, 
+    "end_profile_step": 5, 
+    "tuner_type": "gridsearch", 
+    "tuner_early_stopping": 5, 
+    "tuner_num_trials": 50, 
+    "model_info_path": null, 
+    "mp_size": 1, 
+    "max_train_batch_size": null, 
+    "min_train_batch_size": 1, 
+    "max_train_micro_batch_size_per_gpu": 1.024000e+03, 
+    "min_train_micro_batch_size_per_gpu": 1, 
+    "num_tuning_micro_batch_sizes": 3
+}
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   bfloat16_enabled ............. False
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   bfloat16_immediate_grad_update  False
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   checkpoint_parallel_write_pipeline  False
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   checkpoint_tag_validation_enabled  True
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   checkpoint_tag_validation_fail  False
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   comms_config ................. <deepspeed.comm.config.DeepSpeedCommsConfig object at 0x7f5a9e7adc90>
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   communication_data_type ...... None
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   compression_config ........... {'weight_quantization': {'shared_parameters': {'enabled': False, 'quantizer_kernel': False, 'schedule_offset': 0, 'quantize_groups': 1, 'quantize_verbose': False, 'quantization_type': 'symmetric', 'quantize_weight_in_forward': False, 'rounding': 'nearest', 'fp16_mixed_quantize': False, 'quantize_change_ratio': 0.001}, 'different_groups': {}}, 'activation_quantization': {'shared_parameters': {'enabled': False, 'quantization_type': 'symmetric', 'range_calibration': 'dynamic', 'schedule_offset': 1000}, 'different_groups': {}}, 'sparse_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'row_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'head_pruning': {'shared_parameters': {'enabled': False, 'method': 'topk', 'schedule_offset': 1000}, 'different_groups': {}}, 'channel_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'layer_reduction': {'enabled': False}}
+[2024-11-11 16:24:59,972] [INFO] [config.py:1003:print]   curriculum_enabled_legacy .... False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   curriculum_params_legacy ..... False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   data_efficiency_config ....... {'enabled': False, 'seed': 1234, 'data_sampling': {'enabled': False, 'num_epochs': 1000, 'num_workers': 0, 'curriculum_learning': {'enabled': False}}, 'data_routing': {'enabled': False, 'random_ltd': {'enabled': False, 'layer_token_lr_schedule': {'enabled': False}}}}
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   data_efficiency_enabled ...... False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   dataloader_drop_last ......... False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   disable_allgather ............ False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   dump_state ................... False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   dynamic_loss_scale_args ...... {'init_scale': 65536, 'scale_window': 100, 'delayed_shift': 2, 'consecutive_hysteresis': False, 'min_scale': 1}
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   eigenvalue_enabled ........... False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   eigenvalue_gas_boundary_resolution  1
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   eigenvalue_layer_name ........ bert.encoder.layer
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   eigenvalue_layer_num ......... 0
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   eigenvalue_max_iter .......... 100
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   eigenvalue_stability ......... 1e-06
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   eigenvalue_tol ............... 0.01
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   eigenvalue_verbose ........... False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   elasticity_enabled ........... False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   flops_profiler_config ........ {
+    "enabled": false, 
+    "recompute_fwd_factor": 0.0, 
+    "profile_step": 1, 
+    "module_depth": -1, 
+    "top_modules": 1, 
+    "detailed": true, 
+    "output_file": null
+}
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   fp16_auto_cast ............... False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   fp16_enabled ................. True
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   fp16_master_weights_and_gradients  False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   global_rank .................. 0
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   grad_accum_dtype ............. None
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   gradient_accumulation_steps .. 1
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   gradient_clipping ............ 1.0
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   gradient_predivide_factor .... 1.0
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   graph_harvesting ............. False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   hybrid_engine ................ enabled=False max_out_tokens=512 inference_tp_size=1 release_inference_cache=False pin_parameters=True tp_gather_partition_size=8
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   initial_dynamic_scale ........ 65536
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   load_universal_checkpoint .... False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   loss_scale ................... 0
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   memory_breakdown ............. False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   mics_hierarchial_params_gather  False
+[2024-11-11 16:24:59,973] [INFO] [config.py:1003:print]   mics_shard_size .............. -1
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   monitor_config ............... tensorboard=TensorBoardConfig(enabled=False, output_path='step2_tensorboard/ds_tensorboard_logs/', job_name='step2_model_tensorboard') comet=CometConfig(enabled=False, samples_log_interval=100, project=None, workspace=None, api_key=None, experiment_name=None, experiment_key=None, online=None, mode=None) wandb=WandbConfig(enabled=False, group=None, team=None, project='deepspeed') csv_monitor=CSVConfig(enabled=False, output_path='', job_name='DeepSpeedJobName')
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   nebula_config ................ {
+    "enabled": false, 
+    "persistent_storage_path": null, 
+    "persistent_time_interval": 100, 
+    "num_of_version_in_retention": 2, 
+    "enable_nebula_load": true, 
+    "load_path": null
+}
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   optimizer_legacy_fusion ...... False
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   optimizer_name ............... None
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   optimizer_params ............. None
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   pipeline ..................... {'stages': 'auto', 'partition': 'best', 'seed_layers': False, 'activation_checkpoint_interval': 0, 'pipe_partitioned': True, 'grad_partitioned': True}
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   pld_enabled .................. False
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   pld_params ................... False
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   prescale_gradients ........... False
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   scheduler_name ............... None
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   scheduler_params ............. None
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   seq_parallel_communication_data_type  torch.float32
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   sparse_attention ............. None
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   sparse_gradients_enabled ..... False
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   steps_per_print .............. 10
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   timers_config ................ enabled=True synchronized=True
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   train_batch_size ............. 32
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   train_micro_batch_size_per_gpu  8
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   use_data_before_expert_parallel_  False
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   use_node_local_storage ....... False
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   wall_clock_breakdown ......... False
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   weight_quantization_config ... None
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   world_size ................... 4
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   zero_allow_untested_optimizer  False
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   zero_config .................. stage=2 contiguous_gradients=True reduce_scatter=True reduce_bucket_size=500000000 use_multi_rank_bucket_allreduce=True allgather_partitions=True allgather_bucket_size=500000000 overlap_comm=True load_from_fp32_weights=True elastic_checkpoint=False offload_param=DeepSpeedZeroOffloadParamConfig(device='cpu', nvme_path=None, buffer_count=5, buffer_size=100000000, max_in_cpu=1000000000, pin_memory=False) offload_optimizer=DeepSpeedZeroOffloadOptimizerConfig(device='cpu', nvme_path=None, buffer_count=4, pin_memory=False, pipeline_read=False, pipeline_write=False, fast_init=False, ratio=1.0) sub_group_size=1000000000 cpu_offload_param=None cpu_offload_use_pin_memory=None cpu_offload=None prefetch_bucket_size=30000000 param_persistence_threshold=10000 model_persistence_threshold=9223372036854775807 max_live_parameters=30000000 max_reuse_distance=1000000000 gather_16bit_weights_on_model_save=False use_all_reduce_for_fetch_params=False stage3_gather_fp16_weights_on_model_save=False ignore_unused_parameters=True legacy_stage1=False round_robin_gradients=False zero_hpz_partition_size=1 zero_quantized_weights=False zero_quantized_nontrainable_weights=False zero_quantized_gradients=False mics_shard_size=-1 mics_hierarchical_params_gather=False memory_efficient_linear=False pipeline_loading_checkpoint=False override_module_apply=True
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   zero_enabled ................. True
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   zero_force_ds_cpu_optimizer .. True
+[2024-11-11 16:24:59,974] [INFO] [config.py:1003:print]   zero_optimization_stage ...... 2
+[2024-11-11 16:24:59,975] [INFO] [config.py:989:print_user_config]   json = {
+    "train_batch_size": 32, 
+    "train_micro_batch_size_per_gpu": 8, 
+    "steps_per_print": 10, 
+    "zero_optimization": {
+        "stage": 2, 
+        "overlap_comm": true, 
+        "offload_param": {
+            "device": "cpu"
+        }, 
+        "offload_optimizer": {
+            "device": "cpu"
+        }, 
+        "stage3_param_persistence_threshold": 1.000000e+04, 
+        "stage3_max_live_parameters": 3.000000e+07, 
+        "stage3_prefetch_bucket_size": 3.000000e+07, 
+        "memory_efficient_linear": false
+    }, 
+    "fp16": {
+        "enabled": true, 
+        "loss_scale_window": 100
+    }, 
+    "gradient_clipping": 1.0, 
+    "prescale_gradients": false, 
+    "wall_clock_breakdown": false, 
+    "hybrid_engine": {
+        "enabled": false, 
+        "max_out_tokens": 512, 
+        "inference_tp_size": 1, 
+        "release_inference_cache": false, 
+        "pin_parameters": true, 
+        "tp_gather_partition_size": 8
+    }, 
+    "tensorboard": {
+        "enabled": false, 
+        "output_path": "step2_tensorboard/ds_tensorboard_logs/", 
+        "job_name": "step2_model_tensorboard"
+    }
+}
+***** Running training *****
+***** Evaluating reward, Epoch 0/1 *****
+chosen_last_scores (higher is better) : 0.14394274353981018, rejected_last_scores (lower is better) : 0.11484881490468979, acc (higher is better) : 0.5053815841674805
+Beginning of Epoch 1/1, Total Micro Batches 954
+[2024-11-11 16:25:58,374] [INFO] [loss_scaler.py:190:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 65536, but hysteresis is 2. Reducing hysteresis to 1
+[2024-11-11 16:26:14,708] [INFO] [loss_scaler.py:183:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 65536, reducing to 32768
+[2024-11-11 16:26:26,938] [INFO] [loss_scaler.py:183:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 32768, reducing to 16384
+[2024-11-11 16:26:36,286] [INFO] [loss_scaler.py:183:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, reducing to 8192
+[2024-11-11 16:26:45,092] [INFO] [loss_scaler.py:183:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 8192, reducing to 4096
+[2024-11-11 16:27:01,944] [INFO] [loss_scaler.py:183:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 4096, reducing to 2048
+[2024-11-11 16:27:24,946] [INFO] [logging.py:128:log_dist] [Rank 0] step=10, skipped=6, lr=[9.649581414653219e-06, 9.649581414653219e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:27:25,010] [INFO] [timer.py:264:stop] epoch=0/micro_step=10/global_step=10, RunningAvgSamplesPerSec=3.641938413560497, CurrSamplesPerSec=4.159997902041634, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:28:46,327] [INFO] [logging.py:128:log_dist] [Rank 0] step=20, skipped=6, lr=[9.644873163542849e-06, 9.644873163542849e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:28:46,478] [INFO] [timer.py:264:stop] epoch=0/micro_step=20/global_step=20, RunningAvgSamplesPerSec=3.7957115821219016, CurrSamplesPerSec=3.750801684452142, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:30:10,291] [INFO] [logging.py:128:log_dist] [Rank 0] step=30, skipped=6, lr=[9.634938551985533e-06, 9.634938551985533e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:30:10,353] [INFO] [timer.py:264:stop] epoch=0/micro_step=30/global_step=30, RunningAvgSamplesPerSec=3.8029134759273413, CurrSamplesPerSec=4.076663938757274, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:31:40,987] [INFO] [logging.py:128:log_dist] [Rank 0] step=40, skipped=6, lr=[9.619788352435052e-06, 9.619788352435052e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:31:41,051] [INFO] [timer.py:264:stop] epoch=0/micro_step=40/global_step=40, RunningAvgSamplesPerSec=3.726682549213115, CurrSamplesPerSec=3.48744661195464, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:33:01,857] [INFO] [logging.py:128:log_dist] [Rank 0] step=50, skipped=6, lr=[9.599438992793347e-06, 9.599438992793347e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:33:01,920] [INFO] [timer.py:264:stop] epoch=0/micro_step=50/global_step=50, RunningAvgSamplesPerSec=3.7725199910913862, CurrSamplesPerSec=4.3300737053692515, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:34:22,747] [INFO] [logging.py:128:log_dist] [Rank 0] step=60, skipped=6, lr=[9.573912538597156e-06, 9.573912538597156e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:34:22,810] [INFO] [timer.py:264:stop] epoch=0/micro_step=60/global_step=60, RunningAvgSamplesPerSec=3.8030173330863275, CurrSamplesPerSec=4.005633505357525, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:35:38,802] [INFO] [logging.py:128:log_dist] [Rank 0] step=70, skipped=6, lr=[9.54323666909156e-06, 9.54323666909156e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:35:38,865] [INFO] [timer.py:264:stop] epoch=0/micro_step=70/global_step=70, RunningAvgSamplesPerSec=3.857665709542797, CurrSamplesPerSec=4.498581110549884, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:36:54,012] [INFO] [logging.py:128:log_dist] [Rank 0] step=80, skipped=6, lr=[9.507444647216393e-06, 9.507444647216393e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:36:54,176] [INFO] [timer.py:264:stop] epoch=0/micro_step=80/global_step=80, RunningAvgSamplesPerSec=3.9038577134039323, CurrSamplesPerSec=4.317825075163642, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:38:08,601] [INFO] [logging.py:128:log_dist] [Rank 0] step=90, skipped=6, lr=[9.46657528353806e-06, 9.46657528353806e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:38:08,665] [INFO] [timer.py:264:stop] epoch=0/micro_step=90/global_step=90, RunningAvgSamplesPerSec=3.9448526610601564, CurrSamplesPerSec=4.146053755983187, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:39:23,468] [INFO] [logging.py:128:log_dist] [Rank 0] step=100, skipped=6, lr=[9.420672894165833e-06, 9.420672894165833e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:39:23,532] [INFO] [timer.py:264:stop] epoch=0/micro_step=100/global_step=100, RunningAvgSamplesPerSec=3.976197949855449, CurrSamplesPerSec=4.643179103783858, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:40:38,713] [INFO] [logging.py:128:log_dist] [Rank 0] step=110, skipped=6, lr=[9.369787252698333e-06, 9.369787252698333e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:40:38,788] [INFO] [timer.py:264:stop] epoch=0/micro_step=110/global_step=110, RunningAvgSamplesPerSec=4.000307189503648, CurrSamplesPerSec=3.721077978585382, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:41:51,697] [INFO] [logging.py:128:log_dist] [Rank 0] step=120, skipped=6, lr=[9.313973536252231e-06, 9.313973536252231e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:41:51,782] [INFO] [timer.py:264:stop] epoch=0/micro_step=120/global_step=120, RunningAvgSamplesPerSec=4.030259817010384, CurrSamplesPerSec=4.627963215543717, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:43:05,426] [INFO] [logging.py:128:log_dist] [Rank 0] step=130, skipped=6, lr=[9.253292265631733e-06, 9.253292265631733e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:43:05,488] [INFO] [timer.py:264:stop] epoch=0/micro_step=130/global_step=130, RunningAvgSamplesPerSec=4.05302289094409, CurrSamplesPerSec=4.103539076603871, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:44:19,301] [INFO] [logging.py:128:log_dist] [Rank 0] step=140, skipped=6, lr=[9.187809239703712e-06, 9.187809239703712e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:44:19,365] [INFO] [timer.py:264:stop] epoch=0/micro_step=140/global_step=140, RunningAvgSamplesPerSec=4.072050960686353, CurrSamplesPerSec=4.378843061792071, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:45:35,852] [INFO] [logging.py:128:log_dist] [Rank 0] step=150, skipped=6, lr=[9.117595464049657e-06, 9.117595464049657e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:45:35,915] [INFO] [timer.py:264:stop] epoch=0/micro_step=150/global_step=150, RunningAvgSamplesPerSec=4.07924373828374, CurrSamplesPerSec=4.354048714396555, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:46:50,438] [INFO] [logging.py:128:log_dist] [Rank 0] step=160, skipped=6, lr=[9.04272707397177e-06, 9.04272707397177e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:46:50,611] [INFO] [timer.py:264:stop] epoch=0/micro_step=160/global_step=160, RunningAvgSamplesPerSec=4.0916730070175475, CurrSamplesPerSec=4.5220097820643925, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:48:08,565] [INFO] [logging.py:128:log_dist] [Rank 0] step=170, skipped=6, lr=[8.963285251936762e-06, 8.963285251936762e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:48:08,640] [INFO] [timer.py:264:stop] epoch=0/micro_step=170/global_step=170, RunningAvgSamplesPerSec=4.092281722205028, CurrSamplesPerSec=4.340077408628719, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:49:25,602] [INFO] [logging.py:128:log_dist] [Rank 0] step=180, skipped=6, lr=[8.879356139546789e-06, 8.879356139546789e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:49:25,665] [INFO] [timer.py:264:stop] epoch=0/micro_step=180/global_step=180, RunningAvgSamplesPerSec=4.095770410341629, CurrSamplesPerSec=4.305371112416105, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:50:45,375] [INFO] [logging.py:128:log_dist] [Rank 0] step=190, skipped=6, lr=[8.791030744133057e-06, 8.791030744133057e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:50:45,498] [INFO] [timer.py:264:stop] epoch=0/micro_step=190/global_step=190, RunningAvgSamplesPerSec=4.0910684612977235, CurrSamplesPerSec=4.5259213407244046, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:52:00,178] [INFO] [logging.py:128:log_dist] [Rank 0] step=200, skipped=6, lr=[8.69840484007331e-06, 8.69840484007331e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:52:00,304] [INFO] [timer.py:264:stop] epoch=0/micro_step=200/global_step=200, RunningAvgSamplesPerSec=4.100141755761822, CurrSamplesPerSec=4.361600805201263, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:53:17,840] [INFO] [logging.py:128:log_dist] [Rank 0] step=210, skipped=6, lr=[8.60157886494026e-06, 8.60157886494026e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:53:17,902] [INFO] [timer.py:264:stop] epoch=0/micro_step=210/global_step=210, RunningAvgSamplesPerSec=4.101312950446707, CurrSamplesPerSec=4.010913120383477, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:54:33,676] [INFO] [logging.py:128:log_dist] [Rank 0] step=220, skipped=6, lr=[8.50065781059355e-06, 8.50065781059355e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:54:33,740] [INFO] [timer.py:264:stop] epoch=0/micro_step=220/global_step=220, RunningAvgSamplesPerSec=4.106629249804694, CurrSamplesPerSec=4.607037680035923, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:55:53,564] [INFO] [logging.py:128:log_dist] [Rank 0] step=230, skipped=6, lr=[8.395751109333328e-06, 8.395751109333328e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:55:53,627] [INFO] [timer.py:264:stop] epoch=0/micro_step=230/global_step=230, RunningAvgSamplesPerSec=4.102129709361043, CurrSamplesPerSec=3.9089756295173843, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:57:07,819] [INFO] [logging.py:128:log_dist] [Rank 0] step=240, skipped=6, lr=[8.286972515238899e-06, 8.286972515238899e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:57:07,882] [INFO] [timer.py:264:stop] epoch=0/micro_step=240/global_step=240, RunningAvgSamplesPerSec=4.1104713904323775, CurrSamplesPerSec=3.960140029716275, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:58:21,631] [INFO] [logging.py:128:log_dist] [Rank 0] step=250, skipped=6, lr=[8.174439980821116e-06, 8.174439980821116e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:58:21,770] [INFO] [timer.py:264:stop] epoch=0/micro_step=250/global_step=250, RunningAvgSamplesPerSec=4.1189728635915435, CurrSamplesPerSec=4.401937880680795, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 16:59:34,579] [INFO] [logging.py:128:log_dist] [Rank 0] step=260, skipped=6, lr=[8.058275529122275e-06, 8.058275529122275e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 16:59:34,674] [INFO] [timer.py:264:stop] epoch=0/micro_step=260/global_step=260, RunningAvgSamplesPerSec=4.128858710834588, CurrSamplesPerSec=4.444130932250808, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:00:47,574] [INFO] [logging.py:128:log_dist] [Rank 0] step=270, skipped=6, lr=[7.938605121402164e-06, 7.938605121402164e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:00:47,835] [INFO] [timer.py:264:stop] epoch=0/micro_step=270/global_step=270, RunningAvgSamplesPerSec=4.137535514714818, CurrSamplesPerSec=4.623291217739658, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:02:00,554] [INFO] [logging.py:128:log_dist] [Rank 0] step=280, skipped=6, lr=[7.815558520553775e-06, 7.815558520553775e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:02:00,636] [INFO] [timer.py:264:stop] epoch=0/micro_step=280/global_step=280, RunningAvgSamplesPerSec=4.146318165813838, CurrSamplesPerSec=4.352683574563156, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:03:11,376] [INFO] [logging.py:128:log_dist] [Rank 0] step=290, skipped=6, lr=[7.689269150396783e-06, 7.689269150396783e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:03:11,593] [INFO] [timer.py:264:stop] epoch=0/micro_step=290/global_step=290, RunningAvgSamplesPerSec=4.157978809798919, CurrSamplesPerSec=4.63593486146376, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:04:24,274] [INFO] [logging.py:128:log_dist] [Rank 0] step=300, skipped=6, lr=[7.559873951001322e-06, 7.559873951001322e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:04:24,338] [INFO] [timer.py:264:stop] epoch=0/micro_step=300/global_step=300, RunningAvgSamplesPerSec=4.165659912478947, CurrSamplesPerSec=4.185669200628046, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:05:36,978] [INFO] [logging.py:128:log_dist] [Rank 0] step=310, skipped=6, lr=[7.427513230198985e-06, 7.427513230198985e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:05:37,071] [INFO] [timer.py:264:stop] epoch=0/micro_step=310/global_step=310, RunningAvgSamplesPerSec=4.172888719426634, CurrSamplesPerSec=4.304418118528029, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:05:49,531] [INFO] [loss_scaler.py:190:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, but hysteresis is 2. Reducing hysteresis to 1
+[2024-11-11 17:06:47,021] [INFO] [logging.py:128:log_dist] [Rank 0] step=320, skipped=7, lr=[7.305971618862801e-06, 7.305971618862801e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:06:47,137] [INFO] [timer.py:264:stop] epoch=0/micro_step=320/global_step=320, RunningAvgSamplesPerSec=4.184288075062455, CurrSamplesPerSec=4.627165947347364, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:07:59,724] [INFO] [logging.py:128:log_dist] [Rank 0] step=330, skipped=7, lr=[7.168374346852321e-06, 7.168374346852321e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:07:59,787] [INFO] [timer.py:264:stop] epoch=0/micro_step=330/global_step=330, RunningAvgSamplesPerSec=4.1907062607081675, CurrSamplesPerSec=4.141112421084441, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:08:12,388] [INFO] [loss_scaler.py:183:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, reducing to 8192
+[2024-11-11 17:09:10,453] [INFO] [logging.py:128:log_dist] [Rank 0] step=340, skipped=8, lr=[7.042359933343863e-06, 7.042359933343863e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:09:10,517] [INFO] [timer.py:264:stop] epoch=0/micro_step=340/global_step=340, RunningAvgSamplesPerSec=4.19988743815325, CurrSamplesPerSec=4.463233306246302, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:10:25,740] [INFO] [logging.py:128:log_dist] [Rank 0] step=350, skipped=8, lr=[6.900064600984212e-06, 6.900064600984212e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:10:25,880] [INFO] [timer.py:264:stop] epoch=0/micro_step=350/global_step=350, RunningAvgSamplesPerSec=4.2012290844169735, CurrSamplesPerSec=4.414723240885437, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:11:40,818] [INFO] [logging.py:128:log_dist] [Rank 0] step=360, skipped=8, lr=[6.75551920203827e-06, 6.75551920203827e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:11:40,950] [INFO] [timer.py:264:stop] epoch=0/micro_step=360/global_step=360, RunningAvgSamplesPerSec=4.202944047770946, CurrSamplesPerSec=4.1521758686689765, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:12:53,964] [INFO] [logging.py:128:log_dist] [Rank 0] step=370, skipped=8, lr=[6.608880472239573e-06, 6.608880472239573e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:12:54,028] [INFO] [timer.py:264:stop] epoch=0/micro_step=370/global_step=370, RunningAvgSamplesPerSec=4.2075579350513035, CurrSamplesPerSec=4.5031977246290795, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:14:06,289] [INFO] [logging.py:128:log_dist] [Rank 0] step=380, skipped=8, lr=[6.460307417194994e-06, 6.460307417194994e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:14:06,377] [INFO] [timer.py:264:stop] epoch=0/micro_step=380/global_step=380, RunningAvgSamplesPerSec=4.213025015863059, CurrSamplesPerSec=4.557049838969187, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:15:20,621] [INFO] [logging.py:128:log_dist] [Rank 0] step=390, skipped=8, lr=[6.309961139969285e-06, 6.309961139969285e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:15:20,685] [INFO] [timer.py:264:stop] epoch=0/micro_step=390/global_step=390, RunningAvgSamplesPerSec=4.215400048991344, CurrSamplesPerSec=4.349450786011898, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:16:34,629] [INFO] [logging.py:128:log_dist] [Rank 0] step=400, skipped=8, lr=[6.158004666395278e-06, 6.158004666395278e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:16:34,692] [INFO] [timer.py:264:stop] epoch=0/micro_step=400/global_step=400, RunningAvgSamplesPerSec=4.218078676845331, CurrSamplesPerSec=4.088432109253373, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:17:47,388] [INFO] [logging.py:128:log_dist] [Rank 0] step=410, skipped=8, lr=[6.004602768299163e-06, 6.004602768299163e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:17:47,452] [INFO] [timer.py:264:stop] epoch=0/micro_step=410/global_step=410, RunningAvgSamplesPerSec=4.2223324941034655, CurrSamplesPerSec=4.538128929006881, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:18:59,970] [INFO] [logging.py:128:log_dist] [Rank 0] step=420, skipped=8, lr=[5.849921784832506e-06, 5.849921784832506e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:19:00,138] [INFO] [timer.py:264:stop] epoch=0/micro_step=420/global_step=420, RunningAvgSamplesPerSec=4.226487400366959, CurrSamplesPerSec=4.599302605700069, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:20:12,279] [INFO] [logging.py:128:log_dist] [Rank 0] step=430, skipped=8, lr=[5.694129442104783e-06, 5.694129442104783e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:20:12,343] [INFO] [timer.py:264:stop] epoch=0/micro_step=430/global_step=430, RunningAvgSamplesPerSec=4.231084988315902, CurrSamplesPerSec=4.298387547826251, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:21:25,325] [INFO] [logging.py:128:log_dist] [Rank 0] step=440, skipped=8, lr=[5.537394671311973e-06, 5.537394671311973e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:21:25,391] [INFO] [timer.py:264:stop] epoch=0/micro_step=440/global_step=440, RunningAvgSamplesPerSec=4.234403548128706, CurrSamplesPerSec=4.61157815377664, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:22:37,683] [INFO] [logging.py:128:log_dist] [Rank 0] step=450, skipped=8, lr=[5.379887425558425e-06, 5.379887425558425e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:22:37,805] [INFO] [timer.py:264:stop] epoch=0/micro_step=450/global_step=450, RunningAvgSamplesPerSec=4.238373780993518, CurrSamplesPerSec=4.586825585062943, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:23:48,811] [INFO] [logging.py:128:log_dist] [Rank 0] step=460, skipped=8, lr=[5.221778495570658e-06, 5.221778495570658e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:23:48,874] [INFO] [timer.py:264:stop] epoch=0/micro_step=460/global_step=460, RunningAvgSamplesPerSec=4.243839549700501, CurrSamplesPerSec=4.521085488549758, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:25:02,568] [INFO] [logging.py:128:log_dist] [Rank 0] step=470, skipped=8, lr=[5.063239324502867e-06, 5.063239324502867e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:25:02,684] [INFO] [timer.py:264:stop] epoch=0/micro_step=470/global_step=470, RunningAvgSamplesPerSec=4.245772458640336, CurrSamplesPerSec=4.499611167797188, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:25:21,742] [INFO] [loss_scaler.py:190:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, but hysteresis is 2. Reducing hysteresis to 1
+[2024-11-11 17:26:12,704] [INFO] [logging.py:128:log_dist] [Rank 0] step=480, skipped=9, lr=[4.920328291132542e-06, 4.920328291132542e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:26:12,767] [INFO] [timer.py:264:stop] epoch=0/micro_step=480/global_step=480, RunningAvgSamplesPerSec=4.2520264561364245, CurrSamplesPerSec=4.639952886790927, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:26:39,176] [INFO] [loss_scaler.py:183:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, reducing to 8192
+[2024-11-11 17:27:22,294] [INFO] [logging.py:128:log_dist] [Rank 0] step=490, skipped=10, lr=[4.777333528351929e-06, 4.777333528351929e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:27:22,359] [INFO] [timer.py:264:stop] epoch=0/micro_step=490/global_step=490, RunningAvgSamplesPerSec=4.258611844197019, CurrSamplesPerSec=4.627720352309035, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:28:34,298] [INFO] [logging.py:128:log_dist] [Rank 0] step=500, skipped=10, lr=[4.618505016700914e-06, 4.618505016700914e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:28:34,539] [INFO] [timer.py:264:stop] epoch=0/micro_step=500/global_step=500, RunningAvgSamplesPerSec=4.261999599547789, CurrSamplesPerSec=4.199827666592517, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:29:46,602] [INFO] [logging.py:128:log_dist] [Rank 0] step=510, skipped=10, lr=[4.459900414928145e-06, 4.459900414928145e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:29:46,775] [INFO] [timer.py:264:stop] epoch=0/micro_step=510/global_step=510, RunningAvgSamplesPerSec=4.265196638030229, CurrSamplesPerSec=4.464547645966371, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:30:57,900] [INFO] [logging.py:128:log_dist] [Rank 0] step=520, skipped=10, lr=[4.301691703662423e-06, 4.301691703662423e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:30:58,038] [INFO] [timer.py:264:stop] epoch=0/micro_step=520/global_step=520, RunningAvgSamplesPerSec=4.269345155541496, CurrSamplesPerSec=4.337504095999026, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:32:09,290] [INFO] [logging.py:128:log_dist] [Rank 0] step=530, skipped=10, lr=[4.144050434254347e-06, 4.144050434254347e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:32:09,463] [INFO] [timer.py:264:stop] epoch=0/micro_step=530/global_step=530, RunningAvgSamplesPerSec=4.273168248986362, CurrSamplesPerSec=4.586986418801966, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:33:26,009] [INFO] [logging.py:128:log_dist] [Rank 0] step=540, skipped=10, lr=[3.987147542757061e-06, 3.987147542757061e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:33:26,071] [INFO] [timer.py:264:stop] epoch=0/micro_step=540/global_step=540, RunningAvgSamplesPerSec=4.271356164151059, CurrSamplesPerSec=4.631040465985733, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:34:39,241] [INFO] [logging.py:128:log_dist] [Rank 0] step=550, skipped=10, lr=[3.831153164574202e-06, 3.831153164574202e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:34:39,353] [INFO] [timer.py:264:stop] epoch=0/micro_step=550/global_step=550, RunningAvgSamplesPerSec=4.273073634943763, CurrSamplesPerSec=4.520832546583911, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:35:51,654] [INFO] [logging.py:128:log_dist] [Rank 0] step=560, skipped=10, lr=[3.6762364499759933e-06, 3.6762364499759933e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:35:51,816] [INFO] [timer.py:264:stop] epoch=0/micro_step=560/global_step=560, RunningAvgSamplesPerSec=4.275567841170574, CurrSamplesPerSec=4.596935471961645, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:37:04,700] [INFO] [logging.py:128:log_dist] [Rank 0] step=570, skipped=10, lr=[3.5225653806835888e-06, 3.5225653806835888e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:37:04,763] [INFO] [timer.py:264:stop] epoch=0/micro_step=570/global_step=570, RunningAvgSamplesPerSec=4.277490080021059, CurrSamplesPerSec=4.121989339740869, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:38:17,835] [INFO] [logging.py:128:log_dist] [Rank 0] step=580, skipped=10, lr=[3.3703065877204917e-06, 3.3703065877204917e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:38:17,898] [INFO] [timer.py:264:stop] epoch=0/micro_step=580/global_step=580, RunningAvgSamplesPerSec=4.2791601272929345, CurrSamplesPerSec=3.750968038935493, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:38:53,848] [INFO] [loss_scaler.py:190:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, but hysteresis is 2. Reducing hysteresis to 1
+[2024-11-11 17:39:06,635] [INFO] [loss_scaler.py:183:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, reducing to 8192
+[2024-11-11 17:39:27,840] [INFO] [logging.py:128:log_dist] [Rank 0] step=590, skipped=12, lr=[3.2496273953015883e-06, 3.2496273953015883e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:39:27,903] [INFO] [timer.py:264:stop] epoch=0/micro_step=590/global_step=590, RunningAvgSamplesPerSec=4.283825319759258, CurrSamplesPerSec=4.31681185667177, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:40:40,748] [INFO] [logging.py:128:log_dist] [Rank 0] step=600, skipped=12, lr=[3.100325607405419e-06, 3.100325607405419e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:40:40,811] [INFO] [timer.py:264:stop] epoch=0/micro_step=600/global_step=600, RunningAvgSamplesPerSec=4.285556372442045, CurrSamplesPerSec=4.621704947039545, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:41:52,732] [INFO] [logging.py:128:log_dist] [Rank 0] step=610, skipped=12, lr=[2.9528939454904656e-06, 2.9528939454904656e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:41:52,852] [INFO] [timer.py:264:stop] epoch=0/micro_step=610/global_step=610, RunningAvgSamplesPerSec=4.2880515602965925, CurrSamplesPerSec=4.501875482001571, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:43:05,514] [INFO] [logging.py:128:log_dist] [Rank 0] step=620, skipped=12, lr=[2.8074922749681887e-06, 2.8074922749681887e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:43:05,708] [INFO] [timer.py:264:stop] epoch=0/micro_step=620/global_step=620, RunningAvgSamplesPerSec=4.289709570734124, CurrSamplesPerSec=4.446038241416577, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:44:19,219] [INFO] [logging.py:128:log_dist] [Rank 0] step=630, skipped=12, lr=[2.664278260057947e-06, 2.664278260057947e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:44:19,289] [INFO] [timer.py:264:stop] epoch=0/micro_step=630/global_step=630, RunningAvgSamplesPerSec=4.2906547771392765, CurrSamplesPerSec=4.023047857104919, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:45:31,601] [INFO] [logging.py:128:log_dist] [Rank 0] step=640, skipped=12, lr=[2.523407192826058e-06, 2.523407192826058e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:45:31,812] [INFO] [timer.py:264:stop] epoch=0/micro_step=640/global_step=640, RunningAvgSamplesPerSec=4.292529736350003, CurrSamplesPerSec=4.319593374641013, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:46:42,834] [INFO] [logging.py:128:log_dist] [Rank 0] step=650, skipped=12, lr=[2.385031824797085e-06, 2.385031824797085e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:46:42,898] [INFO] [timer.py:264:stop] epoch=0/micro_step=650/global_step=650, RunningAvgSamplesPerSec=4.2956201445617, CurrSamplesPerSec=4.479077117274864, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:47:59,117] [INFO] [logging.py:128:log_dist] [Rank 0] step=660, skipped=12, lr=[2.249302201319887e-06, 2.249302201319887e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:47:59,354] [INFO] [timer.py:264:stop] epoch=0/micro_step=660/global_step=660, RunningAvgSamplesPerSec=4.293912875132361, CurrSamplesPerSec=3.9009505448643567, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:49:12,851] [INFO] [logging.py:128:log_dist] [Rank 0] step=670, skipped=12, lr=[2.116365498868104e-06, 2.116365498868104e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:49:12,920] [INFO] [timer.py:264:stop] epoch=0/micro_step=670/global_step=670, RunningAvgSamplesPerSec=4.294750421287684, CurrSamplesPerSec=4.073145463178122, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:50:28,883] [INFO] [logging.py:128:log_dist] [Rank 0] step=680, skipped=12, lr=[1.9863658654514668e-06, 1.9863658654514668e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:50:28,946] [INFO] [timer.py:264:stop] epoch=0/micro_step=680/global_step=680, RunningAvgSamplesPerSec=4.293473645608675, CurrSamplesPerSec=3.8209209542653975, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:51:26,668] [INFO] [loss_scaler.py:190:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, but hysteresis is 2. Reducing hysteresis to 1
+[2024-11-11 17:51:41,232] [INFO] [logging.py:128:log_dist] [Rank 0] step=690, skipped=13, lr=[1.8719939637995043e-06, 1.8719939637995043e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:51:41,296] [INFO] [timer.py:264:stop] epoch=0/micro_step=690/global_step=690, RunningAvgSamplesPerSec=4.295311461526821, CurrSamplesPerSec=4.248828661308097, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:51:47,089] [INFO] [loss_scaler.py:183:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, reducing to 8192
+[2024-11-11 17:52:53,786] [INFO] [logging.py:128:log_dist] [Rank 0] step=700, skipped=14, lr=[1.7602157670283585e-06, 1.7602157670283585e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:52:53,850] [INFO] [timer.py:264:stop] epoch=0/micro_step=700/global_step=700, RunningAvgSamplesPerSec=4.296929933841942, CurrSamplesPerSec=4.417304698861559, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:54:07,576] [INFO] [logging.py:128:log_dist] [Rank 0] step=710, skipped=14, lr=[1.6391791023026543e-06, 1.6391791023026543e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:54:07,694] [INFO] [timer.py:264:stop] epoch=0/micro_step=710/global_step=710, RunningAvgSamplesPerSec=4.297451680300649, CurrSamplesPerSec=4.322019097845652, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:55:20,083] [INFO] [logging.py:128:log_dist] [Rank 0] step=720, skipped=14, lr=[1.5215969368481583e-06, 1.5215969368481583e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:55:20,146] [INFO] [timer.py:264:stop] epoch=0/micro_step=720/global_step=720, RunningAvgSamplesPerSec=4.299078807364166, CurrSamplesPerSec=4.172403420274963, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:56:33,411] [INFO] [logging.py:128:log_dist] [Rank 0] step=730, skipped=14, lr=[1.4075967692022714e-06, 1.4075967692022714e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:56:33,475] [INFO] [timer.py:264:stop] epoch=0/micro_step=730/global_step=730, RunningAvgSamplesPerSec=4.299966385130747, CurrSamplesPerSec=4.125592363067279, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:57:46,009] [INFO] [logging.py:128:log_dist] [Rank 0] step=740, skipped=14, lr=[1.2973022138143599e-06, 1.2973022138143599e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:57:46,075] [INFO] [timer.py:264:stop] epoch=0/micro_step=740/global_step=740, RunningAvgSamplesPerSec=4.301400988325557, CurrSamplesPerSec=4.241149994115553, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 17:58:57,639] [INFO] [logging.py:128:log_dist] [Rank 0] step=750, skipped=14, lr=[1.1908328670062024e-06, 1.1908328670062024e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 17:58:57,797] [INFO] [timer.py:264:stop] epoch=0/micro_step=750/global_step=750, RunningAvgSamplesPerSec=4.303477285264709, CurrSamplesPerSec=4.616519760789638, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:00:10,748] [INFO] [logging.py:128:log_dist] [Rank 0] step=760, skipped=14, lr=[1.0883041772894255e-06, 1.0883041772894255e-06], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:00:10,812] [INFO] [timer.py:264:stop] epoch=0/micro_step=760/global_step=760, RunningAvgSamplesPerSec=4.304513007487396, CurrSamplesPerSec=4.408014720414259, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:01:22,881] [INFO] [logging.py:128:log_dist] [Rank 0] step=770, skipped=14, lr=[9.8982732018057e-07, 9.8982732018057e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:01:22,995] [INFO] [timer.py:264:stop] epoch=0/micro_step=770/global_step=770, RunningAvgSamplesPerSec=4.306149218649758, CurrSamplesPerSec=4.463861355102322, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:02:33,925] [INFO] [logging.py:128:log_dist] [Rank 0] step=780, skipped=14, lr=[8.955090776495088e-07, 8.955090776495088e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:02:34,049] [INFO] [timer.py:264:stop] epoch=0/micro_step=780/global_step=780, RunningAvgSamplesPerSec=4.308587813799102, CurrSamplesPerSec=4.577754109066857, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:03:46,774] [INFO] [logging.py:128:log_dist] [Rank 0] step=790, skipped=14, lr=[8.054517223319428e-07, 8.054517223319428e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:03:46,947] [INFO] [timer.py:264:stop] epoch=0/micro_step=790/global_step=790, RunningAvgSamplesPerSec=4.309607823770026, CurrSamplesPerSec=4.251588415004609, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:04:00,544] [INFO] [loss_scaler.py:190:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, but hysteresis is 2. Reducing hysteresis to 1
+[2024-11-11 18:04:26,936] [INFO] [loss_scaler.py:183:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, reducing to 8192
+[2024-11-11 18:04:56,337] [INFO] [logging.py:128:log_dist] [Rank 0] step=800, skipped=16, lr=[7.365394572566156e-07, 7.365394572566156e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:04:56,401] [INFO] [timer.py:264:stop] epoch=0/micro_step=800/global_step=800, RunningAvgSamplesPerSec=4.313109585883598, CurrSamplesPerSec=4.161448041987682, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:06:08,591] [INFO] [logging.py:128:log_dist] [Rank 0] step=810, skipped=16, lr=[6.543946104554664e-07, 6.543946104554664e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:06:08,662] [INFO] [timer.py:264:stop] epoch=0/micro_step=810/global_step=810, RunningAvgSamplesPerSec=4.314508638754888, CurrSamplesPerSec=4.380270263821793, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:07:21,314] [INFO] [logging.py:128:log_dist] [Rank 0] step=820, skipped=16, lr=[5.767720998876876e-07, 5.767720998876876e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:07:21,376] [INFO] [timer.py:264:stop] epoch=0/micro_step=820/global_step=820, RunningAvgSamplesPerSec=4.315551441318036, CurrSamplesPerSec=4.609717921985346, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:08:39,312] [INFO] [logging.py:128:log_dist] [Rank 0] step=830, skipped=16, lr=[5.037560944111016e-07, 5.037560944111016e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:08:39,376] [INFO] [timer.py:264:stop] epoch=0/micro_step=830/global_step=830, RunningAvgSamplesPerSec=4.312858236063206, CurrSamplesPerSec=4.621814282631553, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:09:54,282] [INFO] [logging.py:128:log_dist] [Rank 0] step=840, skipped=16, lr=[4.3542576788569923e-07, 4.3542576788569923e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:09:54,345] [INFO] [timer.py:264:stop] epoch=0/micro_step=840/global_step=840, RunningAvgSamplesPerSec=4.312331157793438, CurrSamplesPerSec=4.230779640985462, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:11:09,186] [INFO] [logging.py:128:log_dist] [Rank 0] step=850, skipped=16, lr=[3.7185521332259323e-07, 3.7185521332259323e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:11:09,249] [INFO] [timer.py:264:stop] epoch=0/micro_step=850/global_step=850, RunningAvgSamplesPerSec=4.3118617384808475, CurrSamplesPerSec=4.159408229458509, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:12:22,481] [INFO] [logging.py:128:log_dist] [Rank 0] step=860, skipped=16, lr=[3.1311336254232994e-07, 3.1311336254232994e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:12:22,544] [INFO] [timer.py:264:stop] epoch=0/micro_step=860/global_step=860, RunningAvgSamplesPerSec=4.312493132664792, CurrSamplesPerSec=4.628762195215851, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:13:36,315] [INFO] [logging.py:128:log_dist] [Rank 0] step=870, skipped=16, lr=[2.592639114296529e-07, 2.592639114296529e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:13:36,434] [INFO] [timer.py:264:stop] epoch=0/micro_step=870/global_step=870, RunningAvgSamplesPerSec=4.312711197918758, CurrSamplesPerSec=4.115518924312885, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:14:49,948] [INFO] [logging.py:128:log_dist] [Rank 0] step=880, skipped=16, lr=[2.1036525086577932e-07, 2.1036525086577932e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:14:50,135] [INFO] [timer.py:264:stop] epoch=0/micro_step=880/global_step=880, RunningAvgSamplesPerSec=4.313049928894831, CurrSamplesPerSec=4.643557895278423, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:16:04,734] [INFO] [logging.py:128:log_dist] [Rank 0] step=890, skipped=16, lr=[1.6647040341309084e-07, 1.6647040341309084e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:16:04,853] [INFO] [timer.py:264:stop] epoch=0/micro_step=890/global_step=890, RunningAvgSamplesPerSec=4.3127147525356175, CurrSamplesPerSec=4.6005906112869, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:16:55,087] [INFO] [loss_scaler.py:190:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, but hysteresis is 2. Reducing hysteresis to 1
+[2024-11-11 18:17:01,276] [INFO] [loss_scaler.py:183:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 16384, reducing to 8192
+[2024-11-11 18:17:16,743] [INFO] [logging.py:128:log_dist] [Rank 0] step=900, skipped=18, lr=[1.3498943956201814e-07, 1.3498943956201814e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:17:16,806] [INFO] [timer.py:264:stop] epoch=0/micro_step=900/global_step=900, RunningAvgSamplesPerSec=4.314176896063363, CurrSamplesPerSec=4.187960653791683, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:18:29,440] [INFO] [logging.py:128:log_dist] [Rank 0] step=910, skipped=18, lr=[1.0021772027148823e-07, 1.0021772027148823e-07], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:18:29,504] [INFO] [timer.py:264:stop] epoch=0/micro_step=910/global_step=910, RunningAvgSamplesPerSec=4.3151310435338015, CurrSamplesPerSec=4.084895785954423, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:19:41,960] [INFO] [logging.py:128:log_dist] [Rank 0] step=920, skipped=18, lr=[7.056925098969097e-08, 7.056925098969097e-08], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:19:42,032] [INFO] [timer.py:264:stop] epoch=0/micro_step=920/global_step=920, RunningAvgSamplesPerSec=4.316171837058459, CurrSamplesPerSec=4.446982785588996, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:20:54,674] [INFO] [logging.py:128:log_dist] [Rank 0] step=930, skipped=18, lr=[4.6076180609742285e-08, 4.6076180609742285e-08], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:20:54,737] [INFO] [timer.py:264:stop] epoch=0/micro_step=930/global_step=930, RunningAvgSamplesPerSec=4.317079357264348, CurrSamplesPerSec=4.037597134042003, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:22:06,459] [INFO] [logging.py:128:log_dist] [Rank 0] step=940, skipped=18, lr=[2.6765067841781836e-08, 2.6765067841781836e-08], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:22:06,562] [INFO] [timer.py:264:stop] epoch=0/micro_step=940/global_step=940, RunningAvgSamplesPerSec=4.3185149200937065, CurrSamplesPerSec=4.622309779342331, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+[2024-11-11 18:23:18,754] [INFO] [logging.py:128:log_dist] [Rank 0] step=950, skipped=18, lr=[1.2656852414413506e-08, 1.2656852414413506e-08], mom=[(0.9, 0.95), (0.9, 0.95)]
+[2024-11-11 18:23:18,826] [INFO] [timer.py:264:stop] epoch=0/micro_step=950/global_step=950, RunningAvgSamplesPerSec=4.319651127503296, CurrSamplesPerSec=4.5135168068633265, MemAllocated=12.57GB, MaxMemAllocated=18.72GB
+Epoch 1/1 with loss 0.6107021627686059
+***** Evaluating reward, Epoch 1/1 *****
+chosen_last_scores (higher is better) : -0.21483077108860016, rejected_last_scores (lower is better) : -0.816402018070221, acc (higher is better) : 0.681506872177124
+saving model ...
+[2024-11-11 18:24:32,111] [INFO] [launch.py:351:main] Process 1994032 exits successfully.
+[2024-11-11 18:24:32,112] [INFO] [launch.py:351:main] Process 1994034 exits successfully.
+[2024-11-11 18:24:33,113] [INFO] [launch.py:351:main] Process 1994033 exits successfully.
+[rank0]:[W1111 18:25:07.121542083 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+[2024-11-11 18:25:12,143] [INFO] [launch.py:351:main] Process 1994031 exits successfully.

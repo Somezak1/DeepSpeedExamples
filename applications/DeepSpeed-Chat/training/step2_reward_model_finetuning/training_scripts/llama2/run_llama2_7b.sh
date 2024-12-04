@@ -4,7 +4,7 @@
 
 # DeepSpeed Team
 OUTPUT=$1
-ZERO_STAGE=$2
+ZERO_STAGE=2
 if [ "$OUTPUT" == "" ]; then
     OUTPUT=./output_step2_llama_7b_epoch1_lr9.65e-6
 fi
@@ -13,10 +13,10 @@ if [ "$ZERO_STAGE" == "" ]; then
 fi
 mkdir -p $OUTPUT
 
-deepspeed main.py \
+CUDA_VISIBLE_DEVICES=2,3,4,5 deepspeed main.py \
    --data_path Dahoas/rm-static \
    --data_split 2,4,4 \
-   --model_name_or_path meta-llama/Llama-2-7b-hf \
+   --model_name_or_path /data1/csw_model_weights/Llama-2-7b-chat-hf \
    --per_device_train_batch_size 8 \
    --per_device_eval_batch_size 8 \
    --max_seq_len 512 \

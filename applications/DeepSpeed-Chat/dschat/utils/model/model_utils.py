@@ -88,6 +88,13 @@ def create_hf_model(model_class,
                     ds_config=None,
                     rlhf_training=False,
                     dropout=None):
+    # model_class: AutoModel
+    # model_name_or_path: '/data1/csw_model_weights/Llama-2-7b-chat-hf'
+    # tokenizer: LlamaTokenizer(name_or_path='/data1/csw_model_weights/Llama-2-7b-chat-hf', vocab_size=32000, ...)
+    # ds_config: dict(...)
+    # rlhf_training: False
+    # dropout: None
+
     model_config = AutoConfig.from_pretrained(model_name_or_path)
     configure_dropout(model_config, dropout)
 
@@ -97,6 +104,9 @@ def create_hf_model(model_class,
         dschf = HfDeepSpeedConfig(ds_config)
     else:
         dschf = None
+    # dschf: HfDeepSpeedConfig(ds_config)
+
+    # rlhf_training: False
     if rlhf_training:
         # the weight loading is handled by create critic model
         model = model_class.from_config(model_config)
@@ -107,10 +117,14 @@ def create_hf_model(model_class,
             config=model_config)
 
     model.config.end_token_id = tokenizer.eos_token_id
+    # model.config.end_token_id: 2
     model.config.pad_token_id = model.config.eos_token_id
+    # model.config.pad_token_id: 2
     model.resize_token_embeddings(int(
         8 *
         math.ceil(len(tokenizer) / 8.0)))  # make the vocab size multiple of 8
+    # len(tokenizer): 32001
+    # int(8 * math.ceil(len(tokenizer) / 8.0)): 32008
 
     return model
 
@@ -125,6 +139,15 @@ def create_critic_model(model_name_or_path,
                         compute_fp32_loss=False):
     # OPT model family always put a padding token at the beginning of the sequence,
     # we did not see this in other models but not sure if it is a general rule
+
+    # model_name_or_path: '/data1/csw_model_weights/Llama-2-7b-chat-hf'
+    # tokenizer: LlamaTokenizer(name_or_path='/data1/csw_model_weights/Llama-2-7b-chat-hf', vocab_size=32000, ...)
+    # ds_config: dict(...)
+    # num_padding_at_beginning: 0
+    # rlhf_training: False
+    # dropout: None
+    # zero_stage: 3
+    # compute_fp32_loss: False
 
     import time
 
